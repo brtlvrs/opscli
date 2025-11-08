@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v0.7.3](#v0.7.3)|Using color vars in banner
 |[v0.7.2](#v0.7.2)|Fixed CHANGELOG.md
 |[v0.7.1](#v0.7.1)|Added LICENSE.md
 |[v0.7.0](#v0.7.0)|traps, COMMAND_PROMPT
@@ -30,6 +31,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v0.7.3
+
+changed:
+
+- ops::common::banner - replaced color codes with predefined color variables. Making it better readable
 
 # v0.7.2
 
