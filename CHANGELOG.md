@@ -2,7 +2,8 @@
 
 # Version
 |version|Worked in|
-|---|---|---|
+|---|---|
+|[v0.7.2](#v0.7.2)|Fixed CHANGELOG.md
 |[v0.7.1](#v0.7.1)|Added LICENSE.md
 |[v0.7.0](#v0.7.0)|traps, COMMAND_PROMPT
 |[v0.6.3](#v0.6.3)|refactored ops-info|
@@ -29,6 +30,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v0.7.2
+
+fix:
+
+- typos in the table of CHANGELOG.md
 
 # v0.7.1
 
