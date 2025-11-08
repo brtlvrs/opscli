@@ -7,7 +7,7 @@ function ops::common::banner() {
 #    Parameters:
 #      $1 : Text to display in banner
 #-- END CHEAT --
-    echo -e "\033[93m" 
+    echo -e "${yellow}" 
     cat <<- 'EOF'
 
 __________          __  .__                           .__        ___.    
@@ -18,7 +18,7 @@ __________          __  .__                           .__        ___.
         \/                                     \/  \/           \/    \/       
 
 EOF
-    echo -e "\033[0m"      
+    echo -e "${clr_reset}"      
 }
 
 alias ops-banner='ops::common::banner'
