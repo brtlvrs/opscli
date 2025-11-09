@@ -1,9 +1,4 @@
 #! /bin/bash
-# Some defaults
-devrepo="$HOME/gitlab/dev/opslib"
-
-### functions, aliases and traps ###
-
 
 ### MAIN code ###
 # define colors
@@ -54,6 +49,8 @@ export $stopBlock # mark that the library has been loaded
 # detect if we are sourced or running directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   exitErr_cmd="exit 1"
+  echo -e \n"We don't want to be run library.sh directly, please source it from your .bashrc or run ops-reload\n"
+  exit 0
 else
   exitErr_cmd="return 1"
 fi
@@ -65,6 +62,17 @@ source $OPSLIB_PATH/_common/sourceFolder.sh
 ops::common::sourceFolder "$OPSLIB_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
 
+if [[ $0 == bash || $0 == -bash ]]; then
+  # we are sourced from an interactive shell
+  writeDBG "
+  Sourced from interactive shell"
+else
+  # we are sourced from a script
+  export DEBUG="true"
+  writeINF "Sourced from script: $0"
+  # let's exit here to avoid running code below when sourced from a script
+  return 0
+fi
 
 # Detect if we are running in a Concourse Task
 # if so, setup the BASH environment for the target foundation if ENV_TARGET is set
@@ -88,8 +96,11 @@ else
   $(ops::info::get name) library ( version: \e[0;35m$(ops::info::get version)\e[0m ) is loaded.
   
   To ${cyan}reload${clr_reset} this library run '${yellow}ops-reload${clr_reset}'
-  To see which ${cyan}functions${clr_reset} are  available and how they work use '${yellow}ops-functions${clr_reset}'
-  To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'"
+  To see which ${cyan}functions${clr_reset} are available and how they work use '${yellow}ops-functions${clr_reset}'
+  To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'
+  For general ${cyan}info${clr_reset} about the library run '${yellow}ops-info${clr_reset}'
+  "
+
 fi
 
 # Warn if we are running from a development repo
