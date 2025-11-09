@@ -4,6 +4,9 @@ function ops::info::get() {
 #    Alias:  ops-info
 #    Description: Show current opslib parameters
 #    Parameters:
+#      -a, --all:    Show all available parameters
+#      env:          Return the active environment of this library
+#      running_repo: Return the path of the currently running repository
 #      name:         Return the name of this library
 #      prod_path:    Return the production path of this library
 #      dev_path:     Return the development path of this library
@@ -28,6 +31,14 @@ function ops::info::get() {
             name)
                 # return the name of this library
                 echo "opslib"
+                ;;
+            env)
+                # return the active environment of this library
+                if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
+                    echo "dev"
+                else
+                    echo "prod"
+                fi
                 ;;
             running_repo)
                 echo "${!LIBPATH_VAR}"
