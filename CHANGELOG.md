@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v0.8.0](#v0.8.0)|Added env argument to info function
 |[v0.7.3](#v0.7.3)|Using color vars in banner
 |[v0.7.2](#v0.7.2)|Fixed CHANGELOG.md
 |[v0.7.1](#v0.7.1)|Added LICENSE.md
@@ -31,6 +32,13 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v0.8.0
+
+add:
+
+- ops::info::get - ops-inf - added 'env' argument. This returns dev when we point to the dev repo, or prod if it is the prod repo.
+- ops::functions::init_dev - ops-init-dev - setup the dev environment of this lbrary
 
 # v0.7.3
 
