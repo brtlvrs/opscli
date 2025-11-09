@@ -48,7 +48,7 @@ function ops::info::get() {
                 if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
                     # in dev path, no prod path available
                     local prod_path="${!LIBPATH_VAR}"
-                    prod_path="${prod_path/dev\/$LIBNAME/$LIBNAME}"
+                    prod_path="${prod_path/dev\/$LIBNAME/$LIBNAME}" # convert to prod path
                     echo "$prod_path"
                     return 0
                 fi
@@ -67,7 +67,7 @@ function ops::info::get() {
                     return 0
                 fi
                 local dev_path="${!LIBPATH_VAR}"
-                dev_path="${dev_path/$LIBNAME/dev\/$LIBNAME}"
+                dev_path="${dev_path/$LIBNAME/dev\/$LIBNAME}" # convert to dev path
                 echo "$dev_path"
                 ;;
             prod_version)
