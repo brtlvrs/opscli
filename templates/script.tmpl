@@ -1,0 +1,13 @@
+#!/bin/bash
+if [[  ! -d ${OPSLIB_PATH} ]]; then
+    echo "WARNING: failed to source opslib library, cannot run script."
+    exit 1
+fi
+# load OPSLIB library
+unset OPSLIB_LIB && source ${OPSLIB_PATH}/library.sh
+
+writeINF "So let's demo a function call: ops::demo::function --time "
+ops::demo::function --time
+
+writeWRN "Now run it again but with different argument ops::demo::function --world Hello"
+ops::demo::function --word Hello

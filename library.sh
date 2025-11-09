@@ -1,9 +1,4 @@
 #! /bin/bash
-# Some defaults
-devrepo="$HOME/gitlab/dev/opslib"
-
-### functions, aliases and traps ###
-
 
 ### MAIN code ###
 # define colors
@@ -54,6 +49,8 @@ export $stopBlock # mark that the library has been loaded
 # detect if we are sourced or running directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   exitErr_cmd="exit 1"
+  echo -e \n"We don't want to be run library.sh directly, please source it from your .bashrc or run ops-reload\n"
+  exit 0
 else
   exitErr_cmd="return 1"
 fi
@@ -65,6 +62,17 @@ source $OPSLIB_PATH/_common/sourceFolder.sh
 ops::common::sourceFolder "$OPSLIB_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
 
+if [[ $0 == bash || $0 == -bash ]]; then
+  # we are sourced from an interactive shell
+  writeDBG "
+  Sourced from interactive shell"
+else
+  # we are sourced from a script
+  export DEBUG="true"
+  writeINF "Sourced from script: $0"
+  # let's exit here to avoid running code below when sourced from a script
+  return 0
+fi
 
 # Detect if we are running in a Concourse Task
 # if so, setup the BASH environment for the target foundation if ENV_TARGET is set

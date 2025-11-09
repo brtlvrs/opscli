@@ -3,7 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
-|[v0.8.1](#v0.8.1)|Updated README.md, updated welcome message
+|[v0.9.0](#v0.9.0)|Updated README.md, updated welcome message, added templates
 |[v0.8.0](#v0.8.0)|Added env argument to info function
 |[v0.7.3](#v0.7.3)|Using color vars in banner
 |[v0.7.2](#v0.7.2)|Fixed CHANGELOG.md
@@ -34,7 +34,12 @@ Version format is ```<major>.<minor>.<patch>```
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
 
-# v0.8.1
+# v0.9.0
+
+added:
+
+- template files to extend library with functions
+- template file for writing scripts that use/source this library
 
 changed:
 
