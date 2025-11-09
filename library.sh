@@ -88,8 +88,11 @@ else
   $(ops::info::get name) library ( version: \e[0;35m$(ops::info::get version)\e[0m ) is loaded.
   
   To ${cyan}reload${clr_reset} this library run '${yellow}ops-reload${clr_reset}'
-  To see which ${cyan}functions${clr_reset} are  available and how they work use '${yellow}ops-functions${clr_reset}'
-  To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'"
+  To see which ${cyan}functions${clr_reset} are available and how they work use '${yellow}ops-functions${clr_reset}'
+  To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'
+  For general ${cyan}info${clr_reset} about the library run '${yellow}ops-info${clr_reset}'
+  "
+
 fi
 
 # Warn if we are running from a development repo
