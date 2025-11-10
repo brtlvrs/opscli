@@ -49,11 +49,7 @@ export $stopBlock # mark that the library has been loaded
 # detect if we are sourced or running directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   exitErr_cmd="exit 1"
-<<<<<<< HEAD
-  echo -e \n"We don't want to be run library.sh directly, please source it from your .bashrc or run ops-reload\n"
-=======
   echo -e "\nWe don't want to be run library.sh directly, please source it from your .bashrc or run ops-reload\n"
->>>>>>> dev
   exit 0
 else
   exitErr_cmd="return 1"
