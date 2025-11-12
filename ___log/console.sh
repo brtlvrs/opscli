@@ -4,32 +4,51 @@ function ops::console::write() {
 #-- START CHEAT --
 #  Function: ops::console::write
 #    Alias:  
-#    Description: Write custom message with preformatted headers
+#    Description: Write custom message with preformatted headers to stdout
 #    Parameters:
 #          $1  : message level, INFO, DEBUG, WARNING. ERROR, OK, FAIL, TODO
 #          $2  | custom message
 #-- END CHEAT --
-  local xtrace_was_on=$([[ $- == *x* ]] && echo true || echo false)  
+  # save current xtrace state
+  local xtrace_was_on=$([[ $- == *x* ]] && echo true || echo false) 
+  # disable xtrace for this function
+  set +x 
+
   local level=$1
-  local msg=$2
+  local message=$2
+
+  # set maximum header length
+  local maxHeaderLength=60
+  # define colors
   local clr="\033[0m"
   local clr_reset="\033[0m"
+  local cyan="\033[96m"
+  local yellow="\033[93m"
+  local green="\033[92m"
+  local red="\033[91m"
+  local magenta="\033[95m"
+  local blue="\033[94m"
+  local gray="\033[90m"
+  local whiteOnBlue="\033[97;44m"
+  local whiteOnGreen="\033[97;42m"
+  local whiteOnRed="\033[97;41m"
+
   # handle log level
   case $level in
     info|INFO|Info|INF|inf)
-      clr="\033[96m" # cyan
+      clr="${cyan}" # cyan
       LEVEL="INFO" 
     ;;
     warning|WARNING|Warning|WARN|warn|WRN|wrn)
-      clr="\033[93m" # yellow
+      clr="${yellow}" # yellow
       LEVEL="WARNING (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
     ;;
     error|ERROR|Error|Err|err|ERR)
-      clr="\033[91m"
+      clr="${red}" # red
       LEVEL="ERROR  (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
-      clr="\033[90m"
+      clr="${grey}" # magenta
       LEVEL="DEBUG" 
       if [[ -z debug || $debug != "true" ]]; then
         # we don't want to know debug level
@@ -37,15 +56,15 @@ function ops::console::write() {
       fi
     ;;
     fail|FAIL|false|FALSE|False|Fail)
-      clr="\033[41m"
+      clr="$whiteOnRed"
       LEVEL="FAIL" 
     ;;
     true|TRUE|True|OK|Ok|ok)
-      clr="\033[42m"
+      clr="$whiteOnGreen"
       LEVEL="OK"
     ;;
     todo|TODO|Todo)
-      clr="\033[93m"
+      clr="${yellow}"
       LEVEL="TODO at line ${BASH_LINENO[1]} in ${FUNCNAME[2]} in ${BASH_SOURCE[2]}"
       msg="TODO: $msg"
     ;;
@@ -54,11 +73,9 @@ function ops::console::write() {
     ;;
   esac
 
-  # build log message
-  local message=$2
   # format the firstline with a date and time stamp, level information and have it a consitent length of 40 characters
   local firstLine="[`date '+%F %H:%M:%S %z'`] $LEVEL "
-  local dash_length=$((60 - ${#firstLine}))
+  local dash_length=$(($maxHeaderLength - ${#firstLine}))
   local dashes=$(printf "%*s" $dash_length | tr ' ' '-') # dashes to add as postfix
   firstLine="${firstLine}${dashes}"
   # make the last line as long as the first line, only dashes
