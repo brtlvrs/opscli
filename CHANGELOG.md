@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v0.9.3](#v0.9.3)|Bug fix in console.sh
 |[v0.9.2](#v0.9.2)|Merge fix
 |[v0.9.1](#v0.9.1)|bug fix in library.sh
 |[v0.9.0](#v0.9.0)|Updated README.md, updated welcome message, added templates
@@ -35,6 +36,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v0.9.3
+
+fix:
+
+- missing set +x instruction in console.sh, fixed. Now when you do a set -x to test scripts, the log function will ignore it, making the output more readable when debugging.
 
 # v0.9.2
 
