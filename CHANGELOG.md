@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v1.0.2](#v1.0.2)|Coloured response from ops-functions
 |[v1.0.1](#v1.0.1)|Replaced opslib with opscli|
 |[v1.0.0](#v1.0.0)|Renamed repo from opslib to opscli|
 |[v0.9.3](#v0.9.3)|Bug fix in console.sh
@@ -38,6 +39,17 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+
+#
+
+added:
+
+- path_var and block_var to ops-info, returns the ENV var for the path of this library and the ENV var that prevents reloading.
+
+changed:
+
+- ops-functions returns now coloured response
 
 # v1.0.1
 

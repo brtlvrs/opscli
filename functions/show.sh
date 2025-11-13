@@ -119,7 +119,7 @@ EOF
       ## init var
       local txt_block=""
       # Find text blocks that are encapsuled with the start and end tag.
-      txt_block=$(awk -v start="$start_tag" -v end="$end_tag" '
+      txt_block=$(awk -v start="$start_tag" -v end="$end_tag" -v fname="$file" '
         {
         line = $0
         if (line !~ /^#/) next
@@ -128,8 +128,16 @@ EOF
         if (in_block && line ~ end)  { in_block=0; print "\n" ; next }
         if ( in_block ) {
           if ( /Function:/) { 
-            print "\033[32m" line "\033[0m" 
-            } else { print line }
+            split(line, parts, ":")
+            printf "\033[32m  Function: %s\033[95m%s\033[0m\n","", substr(line, length(parts[1])+2)
+            print "    File: \033[96m" fname "\033[0m"
+            }
+          else if (line ~ /Alias:/) {
+            split(line, parts, ":")
+            printf "%s:\033[93m%s\033[0m\n", parts[1], parts[2]
+            next
+            } 
+          else { print line }
           }
         }
       ' "$file")

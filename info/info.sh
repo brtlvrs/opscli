@@ -40,6 +40,19 @@ function ops::info::get() {
                     echo "prod"
                 fi
                 ;;
+            path_var)
+                # return the path variable name of this library
+                local name=$(ops::info::get name)
+                echo "${name^^}_PATH"
+                ;;
+            block_var)
+                # return the block variable name of this library
+                local pathname=$(ops::info::get path_var)
+                local blockname="$(basename "${!pathname}")_lib"
+                blockname="${blockname//-/_}"
+                blockname="${blockname^^}"
+                echo "$blockname"
+                ;;
             running_repo)
                 echo "${!LIBPATH_VAR}"
                 ;;
@@ -117,6 +130,9 @@ function ops::info::get() {
                 echo -e "dev: ${devIsActive}"
                 echo -e "\tpath: $(ops::info::get dev_path)"
                 echo -e "\tbranch: $(ops::info::get dev_version)"
+                echo -e "ENV vars:"
+                echo -e "\tPath var: $(ops::info::get path_var)"
+                echo -e "\tBlock var: $(ops::info::get block_var)"
                 ;;
             *)
                 # unknown option
