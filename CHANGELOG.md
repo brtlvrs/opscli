@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v1.0.0](#v1.0.0)|Renamed repo from opslib to opscli|
 |[v0.9.3](#v0.9.3)|Bug fix in console.sh
 |[v0.9.2](#v0.9.2)|Merge fix
 |[v0.9.1](#v0.9.1)|bug fix in library.sh
@@ -36,6 +37,13 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v1.0.0
+
+change:
+
+- renamed repo from opslib to opscli. Renaming env vars that are build on this name.
+  OPSLIB_PATH renamed to OPSCLI_PATH and OPSLIB_LIB renamed to OPSCLI_LIB
 
 # v0.9.3
 

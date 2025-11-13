@@ -4,7 +4,7 @@ function ops::functions::update() {
 #-- START CHEAT --
 #  Function: ops::functions::update
 #    Alias:  ops-update <version>
-#    Description: Update the opslib repo under $OPSLIB_PATH location
+#    Description: Update the opslib repo under $OPSCLI_PATH location
 #    Parameters:
 #          $1  : (optional) git branch/tag to update to
 #                 when not used, it will update to the latest version
@@ -40,8 +40,8 @@ function ops::functions::update() {
     "
     Failed to update. Advise is to remove folder and clone the repo again, follow:
 
-      ${cyan}rm -rf $OPSLIB_PATH
-      cd $(dirname $OPSLIB_PATH)
+      ${cyan}rm -rf $OPSCLI_PATH
+      cd $(dirname $OPSCLI_PATH)
       git clone -b <version tag> $(ops::info::get git_url) --no-checkout
       cd $(ops::info::get name)
       git checkout <version tag>${clr_reset}"

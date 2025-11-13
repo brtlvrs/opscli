@@ -114,18 +114,18 @@ When you have multiple changes on the repo, then major trumps minor trumps patch
 
 ### use this library in scripts
 
-When this library is sourced, library.sh will create a env var OPSLIB_PATH which points to the root folder of this library. So when you want to use functions from this library in scripts, the script should start with 
+When this library is sourced, library.sh will create a env var OPSCLI_PATH which points to the root folder of this library. So when you want to use functions from this library in scripts, the script should start with 
 
 ```bash
 #!/bin/bash
 
-if [[  ! -d ${OPSLIB_PATH} ]]; then
+if [[  ! -d ${OPSCLI_PATH} ]]; then
     echo "WARNING: failed to source opslib library, cannot run script."
     exit 1
 fi
 
 # load OPSLIB library
-source ${OPSLIB_PATH}/library.sh
+source ${OPSCLI_PATH}/library.sh
 
 ..... the rest of your code 
 ```

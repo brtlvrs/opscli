@@ -30,7 +30,7 @@ function ops::info::get() {
         case ${arguments[i]} in
             name)
                 # return the name of this library
-                echo "opslib"
+                echo "opscli"
                 ;;
             env)
                 # return the active environment of this library
