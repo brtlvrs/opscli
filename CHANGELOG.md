@@ -43,6 +43,7 @@ Version format is ```<major>.<minor>.<patch>```
 change:
 
 - renamed repo from opslib to opscli. Renaming env vars that are build on this name.
+  OPSLIB_PATH renamed to OPSCLI_PATH and OPSLIB_LIB renamed to OPSCLI_LIB
 
 # v0.9.3
 
