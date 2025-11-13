@@ -2,7 +2,7 @@ function ops::info::get() {
 #-- START CHEAT --
 #  Function: ops::info::get
 #    Alias:  ops-info
-#    Description: Show current opslib parameters
+#    Description: Show current opscli parameters
 #    Parameters:
 #      -a, --all:    Show all available parameters
 #      env:          Return the active environment of this library

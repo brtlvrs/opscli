@@ -24,7 +24,7 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-dev
-#    Description: reload opslib from development path
+#    Description: reload opscli from development path
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
@@ -32,7 +32,7 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-prod
-#    Description: reload opslib from production path
+#    Description: reload opscli from production path
 #    Usage:
 #    Parameters:
 #-- END CHEAT --

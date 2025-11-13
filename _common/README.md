@@ -1,4 +1,4 @@
-# OPSLIB
+# opscli
 
 This repository is a framework for BASH functions. These functions can be used in scripts, reusing code instead of having in scripts similar code for general stuff.
 Also the functions can be used from a BASH terminal. 
@@ -33,13 +33,13 @@ This alias is mentioned in the welcome message when the library is (re)loaded.
 To automaticly load the library when logging into a bash shell, add the following code to the .bashrc
 
 ```bash
-OPSLIBDEV=""
-if [[ -f $HOME/.opslib.dev ]]; then
-    # Opslib was run in development mode
-    OPSLIBDEV="dev/"
+opscliDEV=""
+if [[ -f $HOME/.opscli.dev ]]; then
+    # opscli was run in development mode
+    opscliDEV="dev/"
 fi
-source $HOME/repos/${OPSLIBDEV}opslib/library.sh
-unset OPSLIBDEV
+source $HOME/repos/${opscliDEV}opscli/library.sh
+unset opscliDEV
 ```
 
 ## How-to install this library
