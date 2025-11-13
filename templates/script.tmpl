@@ -1,9 +1,9 @@
 #!/bin/bash
 if [[  ! -d ${OPSCLI_PATH} ]]; then
-    echo "WARNING: failed to source opslib library, cannot run script."
+    echo "WARNING: failed to source opscli library, cannot run script."
     exit 1
 fi
-# load OPSLIB library
+# load opscli library
 unset OPSCLI_LIB && source ${OPSCLI_PATH}/library.sh
 
 writeINF "So let's demo a function call: ops::demo::function --time "

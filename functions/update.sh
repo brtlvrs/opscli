@@ -4,7 +4,7 @@ function ops::functions::update() {
 #-- START CHEAT --
 #  Function: ops::functions::update
 #    Alias:  ops-update <version>
-#    Description: Update the opslib repo under $OPSCLI_PATH location
+#    Description: Update the opscli repo under $OPSCLI_PATH location
 #    Parameters:
 #          $1  : (optional) git branch/tag to update to
 #                 when not used, it will update to the latest version

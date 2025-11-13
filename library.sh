@@ -22,7 +22,7 @@ export OPSCLI_PATH="$OPSCLI_PATH"
 #-- START CHEAT --
 #  Function: 
 #    Alias:  ops-reload
-#    Description: Reload the opslib library under $OPSCLI_PATH
+#    Description: Reload the opscli library under $OPSCLI_PATH
 #    Parameters:
 #-- END CHEAT --
 alias ops-reload="unset ${stopBlock} && source ${OPSCLI_PATH}/library.sh"
@@ -57,8 +57,8 @@ fi
 
 # load function(s) that we need in this script
 source $OPSCLI_PATH/_common/sourceFolder.sh
-# load the opslib library by sourcing all bash (.sh) files in the subfolders.
-#   from this point on all opslib functions are available and can be used
+# load the opscli library by sourcing all bash (.sh) files in the subfolders.
+#   from this point on all opscli functions are available and can be used
 ops::common::sourceFolder "$OPSCLI_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
 

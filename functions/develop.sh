@@ -5,7 +5,7 @@ function ops::functions::init_dev() {
 #-- START CHEAT --
 #  Function: ops::functions::init_dev
 #    Alias:  ops-init-dev
-#    Description: Initialize the development environment for opslib
+#    Description: Initialize the development environment for opscli
 #    Parameters:
 #-- END CHEAT --
     if ops::info::get env | grep -q "dev"; then

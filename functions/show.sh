@@ -14,7 +14,7 @@ ops::functions::show() {
 #-- START CHEAT --
 #  Function: 
 #    Alias:  ops-alias
-#    Description: show alias summary of opslib library
+#    Description: show alias summary of opscli library
 #    Parameters:
 #-- END CHEAT --
 

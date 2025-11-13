@@ -1,8 +1,8 @@
-# OPSLIB repo - README
+# opscli repo - README
 
 |||
 |:---|:---|
-|repository|OPSLIB|
+|repository|opscli|
 |version|[CHANGELOG.md](CHANGELOG.md)|
 |Owner|brtlvrs|
 |License|[MIT](LICENSE.md)|
@@ -47,12 +47,12 @@ source library.sh
 Append the following code to the .bashrc file
 
 ```bash
-#-- load opslib framework
-if [[-f $HOME/.opslib.dev ]]; then
+#-- load opscli framework
+if [[-f $HOME/.opscli.dev ]]; then
     # We detected the development marker file, so we source development environment
-    source $HOME/repos/dev/opslib/library.sh
+    source $HOME/repos/dev/opscli/library.sh
 else
-    source $HOME/repos/opslib/library.sh
+    source $HOME/repos/opscli/library.sh
 fi
 ```
 
@@ -120,11 +120,11 @@ When this library is sourced, library.sh will create a env var OPSCLI_PATH which
 #!/bin/bash
 
 if [[  ! -d ${OPSCLI_PATH} ]]; then
-    echo "WARNING: failed to source opslib library, cannot run script."
+    echo "WARNING: failed to source opscli library, cannot run script."
     exit 1
 fi
 
-# load OPSLIB library
+# load opscli library
 source ${OPSCLI_PATH}/library.sh
 
 ..... the rest of your code 
