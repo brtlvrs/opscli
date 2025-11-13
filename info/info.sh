@@ -8,11 +8,43 @@ function ops::info::get() {
 #      env:          Return the active environment of this library
 #      running_repo: Return the path of the currently running repository
 #      name:         Return the name of this library
+#      path_var:     Return the path variable name of this library
+#      block_var:    Return the block variable name of this library
 #      prod_path:    Return the production path of this library
 #      dev_path:     Return the development path of this library
 #      version:      Return the current version of this library
 #      git_url:      Return the git url of this library
 #-- END CHEAT --
+
+    function ops::info::get::_usage() {
+    cat <<- EOF
+    Show the opscli parameters
+    usage: ops-info [options]
+        or
+           ops-info [key]
+
+    command options:
+
+      -a, --all:    Show all available parameters / keys
+      -h, --help:   Display this message
+
+    keys:
+      env:          Return the active environment of this library
+      running_repo: Return the path of the currently running repository
+      name:         Return the name of this library
+      path_var:     Return the path variable name of this library
+      block_var:    Return the block variable name of this library
+      prod_path:    Return the production path of this library
+      dev_path:     Return the development path of this library
+      version:      Return the current version of this library
+      git_url:      Return the git url of this library
+
+      example:
+        ops-info git_url
+
+EOF
+    }    
+
     function ops::info::get::_process-arguments() {
     local arguments=($(ops::common::splitArgs "$@"))
     
@@ -134,6 +166,11 @@ function ops::info::get() {
                 echo -e "\tPath var: $(ops::info::get path_var)"
                 echo -e "\tBlock var: $(ops::info::get block_var)"
                 ;;
+            -h|--help)
+                # show help message
+                ops::info::get::_usage
+                return 0 # exit parent function with return 0
+                ;;
             *)
                 # unknown option
                 writeWRN "Unknown parameter ${arguments[i]} for ops-info"
@@ -144,6 +181,6 @@ function ops::info::get() {
   }
 
 
-    ops::info::get::_process-arguments "$@"
+    ops::info::get::_process-arguments "$@" || return $?
 }
 alias ops-info=ops::info::get

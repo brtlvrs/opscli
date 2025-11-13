@@ -3,6 +3,7 @@
 # Version
 |version|Worked in|
 |---|---|
+|[v1.1.0](#v1.1.0)|Added --help option to ops-info
 |[v1.0.2](#v1.0.2)|Coloured response from ops-functions
 |[v1.0.1](#v1.0.1)|Replaced opslib with opscli|
 |[v1.0.0](#v1.0.0)|Renamed repo from opslib to opscli|
@@ -41,7 +42,13 @@ Version format is ```<major>.<minor>.<patch>```
 |patch|bug fixes|
 
 
-#
+# v1.1.0
+
+added:
+
+- --help top ops-info, showing help message
+
+# v1.0.2
 
 added:
 
