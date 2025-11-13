@@ -28,7 +28,7 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-dev="unset OPSLIB_LIB;source $HOME/repos/dev/opslib/library.sh"
+  alias ops-dev='unset OPSCLI_LIB;source $(ops::info::get dev_path)/library.sh'
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-prod
@@ -36,4 +36,4 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-prod="unset OPSLIB_LIB;source $HOME/repos/opslib/library.sh"
+  alias ops-prod='unset OPSCLI_LIB;source $(ops::info::get prod_path)/library.sh'

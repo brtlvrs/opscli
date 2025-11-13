@@ -11,21 +11,21 @@ magenta="\033[95m"
 blue="\033[94m"
 
 # export location of this library and create stopblock name
-OPSLIB_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")"&& pwd)"
-libname="$(basename $OPSLIB_PATH)"
-stopBlock="$(basename $OPSLIB_PATH)_lib"
+OPSCLI_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")"&& pwd)"
+libname="$(basename $OPSCLI_PATH)"
+stopBlock="$(basename $OPSCLI_PATH)_lib"
 stopBlock="${stopBlock//[-]/_}" # remove dashes
 stopBlock=${stopBlock^^} # all uppercase
-export OPSLIB_PATH="$OPSLIB_PATH"
+export OPSCLI_PATH="$OPSCLI_PATH"
 
 # set alias for reloading this library
 #-- START CHEAT --
 #  Function: 
 #    Alias:  ops-reload
-#    Description: Reload the opslib library under $OPSLIB_PATH
+#    Description: Reload the opslib library under $OPSCLI_PATH
 #    Parameters:
 #-- END CHEAT --
-alias ops-reload="unset ${stopBlock} && source ${OPSLIB_PATH}/library.sh"
+alias ops-reload="unset ${stopBlock} && source ${OPSCLI_PATH}/library.sh"
 
 # Detect stopblock
 if [ -v "$stopBlock" ]; then
@@ -56,10 +56,10 @@ else
 fi
 
 # load function(s) that we need in this script
-source $OPSLIB_PATH/_common/sourceFolder.sh
+source $OPSCLI_PATH/_common/sourceFolder.sh
 # load the opslib library by sourcing all bash (.sh) files in the subfolders.
 #   from this point on all opslib functions are available and can be used
-ops::common::sourceFolder "$OPSLIB_PATH" || exit_with_error=true
+ops::common::sourceFolder "$OPSCLI_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
 
 if [[ $0 == bash || $0 == -bash ]]; then
@@ -104,11 +104,11 @@ else
 fi
 
 # Warn if we are running from a development repo
-if  [[ "$OPSLIB_PATH" =~ dev/$libname ]]; then
+if  [[ "$OPSCLI_PATH" =~ dev/$libname ]]; then
   # we are running from a dev environment, set the file so .bashrc creates a warning about running with dev
   writeWRN \
   "
-  $(ops::info::get name) is running from a development folder $OPSLIB_PATH
+  $(ops::info::get name) is running from a development folder $OPSCLI_PATH
   To switch to production run ${yellow}ops-prod${clr_reset}
   "
   touch $HOME/.${libname}.dev # so .bashrc knows which library.sh to source

@@ -96,11 +96,11 @@ EOF
 
     # find all bash scripts in subfolders and sort them alphabeticly
     # ignoring the top folder of the repo
-    mapfile -t files_array < <(find "$OPSLIB_PATH" -mindepth 2 -type f -name '*.sh' | sort )
+    mapfile -t files_array < <(find "$OPSCLI_PATH" -mindepth 2 -type f -name '*.sh' | sort )
 
     # we expected files, so exit
     if [[ ${#files_array[@]} -eq 0 ]]; then
-      writeWRN "No script files found under $OPSLIB_PATH and it's subfolders."
+      writeWRN "No script files found under $OPSCLI_PATH and it's subfolders."
       return 1
     fi
 
@@ -111,7 +111,7 @@ EOF
       writeDBG "Processing file: $file"
 
       # guardrail, skipping the library.sh file (which we shouldn't have anyway in our list"
-      if [[ "$file" == "$OPSLIB_PATH/library.sh" ]]; then
+      if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
         writeDBG "skipping file $file"
         continue
       fi
@@ -154,11 +154,11 @@ EOF
 
     # find all bash scripts in subfolders and sort them alphabeticly
     # ignoring the top folder of the repo
-    mapfile -t files_array < <(find "$OPSLIB_PATH" -mindepth 2 -type f -name '*.sh' | sort )
+    mapfile -t files_array < <(find "$OPSCLI_PATH" -mindepth 2 -type f -name '*.sh' | sort )
 
     # we expected files, so exit
     if [[ ${#files_array[@]} -eq 0 ]]; then
-      writeWRN "No script files found under $OPSLIB_PATH and it's subfolders."
+      writeWRN "No script files found under $OPSCLI_PATH and it's subfolders."
       return 1
     fi
 
@@ -169,7 +169,7 @@ EOF
       writeDBG "Processing file: $file"
 
       # guardrail, skipping the library.sh file (which we shouldn't have anyway in our list"
-      if [[ "$file" == "$OPSLIB_PATH/library.sh" ]]; then
+      if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
         writeDBG "skipping file $file"
         continue
       fi
