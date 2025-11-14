@@ -1,9 +1,9 @@
 # CHANGELOG
 
 # Version
-|version|Worked in|
-
+|version|Worked i
 |---|---|
+|[v1.1.2](#v1.1.2)| removed demo
 |[v1.1.1](#v1.1.1)| demo
 |[v1.1.0](#v1.1.0)|Added --help option to ops-info
 |[v1.0.2](#v1.0.2)|Coloured response from ops-functions
@@ -43,6 +43,11 @@ Version format is ```<major>.<minor>.<patch>```
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
 
+# v1.1.2
+
+removed:
+
+- demo folder
 
 # v1.1.1
 
