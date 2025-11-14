@@ -1,0 +1,92 @@
+#!/bin/bash
+
+function ops::demo::function() {
+#-- START CHEAT --
+#  Function: ops::demo::function
+#    Alias:  ops-demo
+#    Description: A demonstration function showing how to write functions
+#                 in the opscli library.
+#    Parameters:
+#-- END CHEAT --
+
+    function ops::demo::function::_guardrails() {
+        # place guardrail code here
+        return 0
+    }
+
+    ops::demo::function::_usage() {
+        cat <<-EOF
+        Usage: ops-demo [options]
+
+        A demonstration function showing how to write functions
+        in the opscli library.
+
+        Options:
+          -h, --help      Show this help message and exit
+          -t, --time      Show the current date and time
+
+
+EOF
+    }
+
+  function ops::demo::function::_process-arguments() {
+    # unset variables
+      unset check_all
+      unset resource_name
+
+    # process script arguments
+    local arguments=($(ops::common::splitArgs "$@"))
+
+    # now process all arguments
+    for (( i = 0; i < ${#arguments[@]}; i++)); do
+				local arg=${arguments[i]}
+				local next_arg=""
+				if (( i + 1 < ${#arguments[@]} )); then
+						next_arg=${arguments[i + 1]}
+				fi
+        case $arg in
+            -h | --help)
+                # show help message
+                ops::demo::function::_usage
+                return 1 # exit parent function with return 0
+                ;;
+            -t | --time)
+                writeERR "$(date)"
+                return 0 # exit parent function with return 0
+                ;;
+            -w| --word)
+                EXTRAWORD=${next_arg}
+                i=$((i + 1)) # skip next argument as we already processed it
+                return 0
+                ;;
+            *)
+                # unknown option
+                writeWRN "Unknown option ${arguments[i]}"
+                ops::demo::function::_usage
+                return 2 # exit parent function with return 1
+                ;;
+        esac
+    done
+  }
+
+
+    function ops::demo::function::_main() {
+        # main code here
+        writeINF "Hello from demo function!"
+        if [[ -n "${EXTRAWORD}" ]]; then
+            writeINF "You provided the extra word: ${EXTRAWORD}"
+        fi
+        return 0
+    }
+
+    #-- main function code starts here --
+    [[ $0 == bash && $0 == -bash ]] && ops::common::banner
+    writeINF "Demo function called"
+    ops::demo::function::_guardrails "$@" || return $?
+    ops::demo::function::_process-arguments "$@" || return $?
+    ops::demo::function::_main || return $?
+    writeINF "Demo function completed successfully"
+    return 0
+}
+
+alias ops-demo='ops::demo::function'

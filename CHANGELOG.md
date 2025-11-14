@@ -2,7 +2,9 @@
 
 # Version
 |version|Worked in|
+
 |---|---|
+|[v1.1.1](#v1.1.1)| demo
 |[v1.1.0](#v1.1.0)|Added --help option to ops-info
 |[v1.0.2](#v1.0.2)|Coloured response from ops-functions
 |[v1.0.1](#v1.0.1)|Replaced opslib with opscli|
@@ -40,6 +42,13 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+
+# v1.1.1
+
+added:
+
+- demo 
 
 
 # v1.1.0
