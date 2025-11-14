@@ -1,8 +1,9 @@
 # CHANGELOG
 
 # Version
-|version|Worked i
+|version|Worked
 |---|---|
+|[v1.2.0](#v1.2.0)| added version validation
 |[v1.1.2](#v1.1.2)| removed demo
 |[v1.1.1](#v1.1.1)| demo
 |[v1.1.0](#v1.1.0)|Added --help option to ops-info
@@ -42,6 +43,18 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v1.2.0
+
+added:
+
+- ops::version::isSupported added, to be used as a guardrail function in scripts as a version check of this library
+
+
+changed:
+
+- library.sh - removed export DEBUG=true line
+- updated template file for scripts including ops::version::isSupported as a guardrail
 
 # v1.1.2
 

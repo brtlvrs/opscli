@@ -68,7 +68,6 @@ if [[ $0 == bash || $0 == -bash ]]; then
   Sourced from interactive shell"
 else
   # we are sourced from a script
-  export DEBUG="true"
   writeINF "Sourced from script: $0"
   # let's exit here to avoid running code below when sourced from a script
   return 0
