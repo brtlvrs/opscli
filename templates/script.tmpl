@@ -5,7 +5,7 @@
     exit 1
 }
 # load opscli library, never place this file inside the opscli library itself to avoid recursion
-unset OPSCLI_LIB && source ${OPSCLI_PATH}/library.sh
+unset OPSCLI_LOADED && source ${OPSCLI_PATH}/library.sh
 
 # validate if version is supported
 ops::version::isSupported v1.2.0 || exit 1

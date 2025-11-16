@@ -3,9 +3,10 @@
 # Version
 |version|Worked
 |---|---|
-|[v1.2.0](#v1.2.0)| added version validation
-|[v1.1.2](#v1.1.2)| removed demo
-|[v1.1.1](#v1.1.1)| demo
+|[v2.0.0](#v2.0.0)|changed assumed location for dev repository
+|[v1.2.0](#v1.2.0)|added version validation
+|[v1.1.2](#v1.1.2)|removed demo
+|[v1.1.1](#v1.1.1)|demo
 |[v1.1.0](#v1.1.0)|Added --help option to ops-info
 |[v1.0.2](#v1.0.2)|Coloured response from ops-functions
 |[v1.0.1](#v1.0.1)|Replaced opslib with opscli|
@@ -43,6 +44,14 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.0.0
+
+changed:
+
+- instead of assuming the dev repository is under a sibling folder called dev. The dev repository ends now with .dev (just like .wiki for wiki repositories). This is a breaking change.
+- Updated README.md with feature paragraph
+- changed suffix of variable that prevents looping of library from _LIB to _LOADED
 
 # v1.2.0
 
