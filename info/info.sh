@@ -57,6 +57,7 @@ EOF
         if [[ "${arguments[i]}" != "name" ]]; then
             local LIBNAME=$(ops::info::get name)
             local LIBPATH_VAR="$(echo "${LIBNAME}_PATH" | tr '[:lower:]' '[:upper:]')"
+            local isDevPath="$(grep -q "/${LIBNAME}\.dev$" <<<"${!LIBPATH_VAR}")"
         fi
 
         case ${arguments[i]} in
@@ -66,7 +67,7 @@ EOF
                 ;;
             env)
                 # return the active environment of this library
-                if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
+                if $isDevPath; then
                     echo "dev"
                 else
                     echo "prod"
@@ -80,7 +81,7 @@ EOF
             block_var)
                 # return the block variable name of this library
                 local pathname=$(ops::info::get path_var)
-                local blockname="$(basename "${!pathname}")_lib"
+                local blockname="$(basename "${!pathname}")_loaded"
                 blockname="${blockname//-/_}"
                 blockname="${blockname^^}"
                 echo "$blockname"
@@ -90,10 +91,10 @@ EOF
                 ;;
             prod_path)
                 # return the production path of this library
-                if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
+                if $isDevPath; then
                     # in dev path, no prod path available
                     local prod_path="${!LIBPATH_VAR}"
-                    prod_path="${prod_path/dev\/$LIBNAME/$LIBNAME}" # convert to prod path
+                    prod_path="${prod_path%.dev}" # remove .dev suffix
                     echo "$prod_path"
                     return 0
                 fi
@@ -106,13 +107,13 @@ EOF
                     echo ""
                     return 0
                 fi
-                if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
+                if grep -q "${LIBMAME}.dev$" <<<"${!LIBPATH_VAR}"; then
                     # in dev path, no prod path available
                     echo "${!LIBPATH_VAR}"
                     return 0
                 fi
                 local dev_path="${!LIBPATH_VAR}"
-                dev_path="${dev_path/$LIBNAME/dev\/$LIBNAME}" # convert to dev path
+                dev_path="${dev_path}.dev" # convert to dev path
                 echo "$dev_path"
                 ;;
             prod_version)
@@ -148,7 +149,7 @@ EOF
             -a|--all)
                 local devIsActive=""
                 local prodIsActive=""
-                if grep -q "dev/$LIBNAME" <<<"${!LIBPATH_VAR}"; then
+                if $isDevPath; then
                     local devIsActive=" (${green}active${clr_reset})"
                 else
                     local prodIsActive=" (${green}active${clr_reset})"

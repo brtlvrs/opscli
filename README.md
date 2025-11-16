@@ -14,9 +14,26 @@ These files are placed in subfolders and are sourced when the library.sh is sour
 To make debugging easier we append ```set +x``` to COMMAND_PROMPT so every ```set -x``` call is closed before the shell prompt $PS1 is shown.  
 Please **fork** this repository if you want to use it (at your own risk)
 
+## TOC
+
+- [Features](#features)  
+- [Installation](#installation)  
+  - [Assumptions / Prerequisites](#assumptions--prerequisites)
+  - [Steps](#steps)
+  - [.bashrc](#bashrc)
+
+
+## Features
+
+- disable xtrace / set +x before each prompt generation in the shell
+- structured approach of reusable BASH scripts
+- script library as a product approach
+- on-demand overview of available functions
+- on-demand overview of bash aliases
+
 ## Installation
 
-### assumptions / preruiqisites
+### Assumptions / Prerequisites
 
 - following is installed:
   - git

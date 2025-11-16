@@ -27,7 +27,7 @@ ops::functions::show() {
       "
       Cannot create cheatsheet, ${LIBPATH_VAR} is not defined. Please reload the $(ops::info::get name) library.
         cd ${!LIBPATH_VAR}
-        unset $(ops::info::get name | tr '[:lower:]' '[:upper:]')_LIB
+        unset $(ops::info::get name | tr '[:lower:]' '[:upper:]')_LOADED
         source ./library.sh"
       return 1
     fi

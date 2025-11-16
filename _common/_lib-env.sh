@@ -21,6 +21,10 @@ alias shellTMPdir='mktemp -d -p $HOME .$(id -u).XXXXX'
 #-- END CHEAT --
 alias shellTMP='mktemp -p $(shellTMPdir)'
 
+# set stopblock variable name
+stopBlock="$((basename $OPSCLI_PATH))_loaded"
+stopBlock="${stopBlock//[.]/_}" # remove dashes
+stopBlock=${stopBlock^^} # all uppercase
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-dev
@@ -28,7 +32,7 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-dev='unset OPSCLI_LIB;source $(ops::info::get dev_path)/library.sh'
+  alias ops-dev='unset ${stopBlock};source $(ops::info::get dev_path)/library.sh'
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-prod
@@ -36,4 +40,5 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-prod='unset OPSCLI_LIB;source $(ops::info::get prod_path)/library.sh'
+  alias ops-prod='unset ${stopBlock};source $(ops::info::get prod_path)/library.sh'
+unset stopBlock

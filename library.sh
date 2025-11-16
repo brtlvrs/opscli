@@ -13,8 +13,9 @@ blue="\033[94m"
 # export location of this library and create stopblock name
 OPSCLI_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")"&& pwd)"
 libname="$(basename $OPSCLI_PATH)"
-stopBlock="$(basename $OPSCLI_PATH)_lib"
-stopBlock="${stopBlock//[-]/_}" # remove dashes
+libname="${libname%s.dev}" # remove .dev suffix if present
+stopBlock="$(basename $OPSCLI_PATH)_loaded"
+stopBlock="${stopBlock//[.]/_}" # remove dashes
 stopBlock=${stopBlock^^} # all uppercase
 export OPSCLI_PATH="$OPSCLI_PATH"
 
@@ -103,7 +104,7 @@ else
 fi
 
 # Warn if we are running from a development repo
-if  [[ "$OPSCLI_PATH" =~ dev/$libname ]]; then
+if  [[ "$OPSCLI_PATH" =~ $libname.dev$ ]]; then
   # we are running from a dev environment, set the file so .bashrc creates a warning about running with dev
   writeWRN \
   "
