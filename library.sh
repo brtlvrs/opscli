@@ -26,10 +26,14 @@ export OPSCLI_PATH="$OPSCLI_PATH"
 #    Description: Reload the opscli library under $OPSCLI_PATH
 #    Parameters:
 #-- END CHEAT --
+if [[ "$1" == "-f" || "$1" == "--force" ]]; then
+  # force reload even if already loaded
+  unset ${stopBlock}
+fi
 alias ops-reload="unset ${stopBlock} && source ${OPSCLI_PATH}/library.sh"
 
 # Detect stopblock
-if [ -v "$stopBlock" ]; then
+if [ -v "${stopBlock}" ]; then
   # Loop detected !!! library has already been sourced, so exit here
   if [[ ${BASH_SOURCE[0]} != "${0}" ]]; then return 0; else exit 0;fi
 fi
