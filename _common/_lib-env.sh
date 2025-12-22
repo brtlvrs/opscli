@@ -21,10 +21,6 @@ alias shellTMPdir='mktemp -d -p $HOME .$(id -u).XXXXX'
 #-- END CHEAT --
 alias shellTMP='mktemp -p $(shellTMPdir)'
 
-# set stopblock variable name
-stopBlock="$((basename $OPSCLI_PATH))_loaded"
-stopBlock="${stopBlock//[.]/_}" # remove dashes
-stopBlock=${stopBlock^^} # all uppercase
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-dev

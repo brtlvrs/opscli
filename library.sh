@@ -11,14 +11,13 @@ magenta="\033[95m"
 blue="\033[94m"
 
 # export location of this library and create stopblock name
+
 OPSCLI_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")"&& pwd)"
-libname="$(basename $OPSCLI_PATH)"
-libname="${libname%s.dev}" # remove .dev suffix if present
-stopBlock="$(basename $OPSCLI_PATH)_loaded"
+stopBlock="$(basename $OPSCLI_PATH)"
+stopBlock="${stopBlock%.dev}_loaded" # remove .dev suffix if present
 stopBlock="${stopBlock//[.]/_}" # remove dashes
 stopBlock=${stopBlock^^} # all uppercase
 export OPSCLI_PATH="$OPSCLI_PATH"
-
 # set alias for reloading this library
 #-- START CHEAT --
 #  Function: 
@@ -66,58 +65,38 @@ source $OPSCLI_PATH/_common/sourceFolder.sh
 #   from this point on all opscli functions are available and can be used
 ops::common::sourceFolder "$OPSCLI_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
-
-if [[ $0 == bash || $0 == -bash ]]; then
-  # we are sourced from an interactive shell
-  writeDBG "
-  Sourced from interactive shell"
-else
-  # we are sourced from a script
-  writeINF "Sourced from script: $0"
-  # let's exit here to avoid running code below when sourced from a script
-  return 0
-fi
+welcomeMSG="$(ops::info::get name) library (version ${magenta}$(ops::info::get version)${clr_reset}) is loaded."
 
 # Detect if we are running in a Concourse Task
 # if so, setup the BASH environment for the target foundation if ENV_TARGET is set
 if [[ -v ATC_EXTERNAL_URL ]]; then
-  writeINF "
-  ${cyan}Concourse ATC${clr_reset} environment variable detected, we are running in a Concourse Task !!
-  $(ops::info::get name) function library ( version: \e[0;35m$(ops::info::get version)\e[0m ) is loaded."
-  if prereqVar ENV_TARGET; then
-    # so we are running in a concourse task, let's also setup the BASH environment."
-    ops::foundation::selector $ENV_TARGET
-    if [[ $? -ne 0 ]]; then
-      writeWRN "Failed to automatically setup BASH environment for $ENV_TARGET"
-      $exitErr_cmd
-    fi
-    writeOK "BASH environment setup for foundation $ENV_TARGET"
-  fi
-else
-  ops::common::banner
-  writeINF \
-  "
-  $(ops::info::get name) library ( version: \e[0;35m$(ops::info::get version)\e[0m ) is loaded.
+  welcomeMSG="$welcomeMSG\n\n${cyan}Concourse ATC${clr_reset} environment variable detected, we are running in a Concourse Task !!"
+fi
+
+rm "$HOME/.$(ops::info::get name).dev" > /dev/null 2>&1
+if [[ "$OPSCLI_PATH" =~ .dev$ ]]; then
+  welcomeMSG="${welcomeMSG}
   
-  To ${cyan}reload${clr_reset} this library run '${yellow}ops-reload${clr_reset}'
-  To see which ${cyan}functions${clr_reset} are available and how they work use '${yellow}ops-functions${clr_reset}'
-  To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'
-  For general ${cyan}info${clr_reset} about the library run '${yellow}ops-info${clr_reset}'
-  "
-
+  ${yellow}WARNING:${clr_reset} Running from a development folder $OPSCLI_PATH
+  To switch to production run '${yellow}ops-prod${clr_reset}'"
+  touch $HOME/.$(ops::info::get name).dev
 fi
 
-# Warn if we are running from a development repo
-if  [[ "$OPSCLI_PATH" =~ $libname.dev$ ]]; then
-  # we are running from a dev environment, set the file so .bashrc creates a warning about running with dev
-  writeWRN \
-  "
-  $(ops::info::get name) is running from a development folder $OPSCLI_PATH
-  To switch to production run ${yellow}ops-prod${clr_reset}
-  "
-  touch $HOME/.${libname}.dev # so .bashrc knows which library.sh to source
-else
-  # we are NOT running from dev environment, so cleanup file
-  rm -f $HOME/.${libname}.dev
+if [[ $0 == bash || $0 == -bash || $0  == */bash ]]; then
+  welcomeMSG="${welcomeMSG}
+
+To ${cyan}reload${clr_reset} this library run '${yellow}ops-reload${clr_reset}'
+To see which ${cyan}functions${clr_reset} are available and how they work use '${yellow}ops-functions${clr_reset}'
+To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-alias${clr_reset}'
+For general ${cyan}info${clr_reset} about the library run '${yellow}ops-info${clr_reset}'"
+  writeDBG "Sourced from an interactive BASH shell"
+fi
+writeINF "$welcomeMSG"
+
+if [[ $0 != BASH ]] && [[ $0 != -bash ]] && [[ $0  != */bash ]]; then
+  # we are sourced from a script
+  writeDBG "Sourced from script: $(realpath $0)"
+  return 0
 fi
 
+writeOK "Succesfully sourced the $(ops::info::get name) library (version ${magenta}$REPOVERSION${clr_reset})"
