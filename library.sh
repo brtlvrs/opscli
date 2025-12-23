@@ -65,7 +65,8 @@ source $OPSCLI_PATH/_common/sourceFolder.sh
 #   from this point on all opscli functions are available and can be used
 ops::common::sourceFolder "$OPSCLI_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
-welcomeMSG="$(ops::info::get name) library (version ${magenta}$(ops::info::get version)${clr_reset}) is loaded."
+REPOVERSION="$(ops::info::get version)"
+welcomeMSG="$(ops::info::get name) library (version ${magenta}$REPOVERSION${clr_reset}) is loaded."
 
 # Detect if we are running in a Concourse Task
 # if so, setup the BASH environment for the target foundation if ENV_TARGET is set

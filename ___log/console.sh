@@ -32,6 +32,8 @@ function ops::console::write() {
   local whiteOnBlue="\033[97;44m"
   local whiteOnGreen="\033[97;42m"
   local whiteOnRed="\033[97;41m"
+  local blackOnGreen="\033[30;42m"
+  local blackOnRed="\033[30;41m"
 
   # handle log level
   case $level in
@@ -50,17 +52,17 @@ function ops::console::write() {
     debug|DEBUG|Debug|DBG|dbg|Dbg)
       clr="${grey}" # magenta
       LEVEL="DEBUG" 
-      if [[ -z debug || $debug != "true" ]]; then
+      if [[ "z${debug}" == "z" ]] && [[ "z${DEBUG}" == "z" ]]; then
         # we don't want to know debug level
         return 0
       fi
     ;;
     fail|FAIL|false|FALSE|False|Fail)
-      clr="$whiteOnRed"
+      clr="$blackOnRed"
       LEVEL="FAIL" 
     ;;
     true|TRUE|True|OK|Ok|ok)
-      clr="$whiteOnGreen"
+      clr="$blackOnGreen"
       LEVEL="OK"
     ;;
     todo|TODO|Todo)
@@ -74,20 +76,27 @@ function ops::console::write() {
   esac
 
   # format the firstline with a date and time stamp, level information and have it a consitent length of 40 characters
-  local firstLine="[`date '+%F %H:%M:%S %z'`] $LEVEL "
-  local dash_length=$(($maxHeaderLength - ${#firstLine}))
+  local timeStamp="[`date '+%F %H:%M:%S %z'`] $LEVEL "
+  local dash_length=$(($maxHeaderLength - ${#timeStamp}))
   local dashes=$(printf "%*s" $dash_length | tr ' ' '-') # dashes to add as postfix
-  firstLine="${firstLine}${dashes}"
+  firstLine="\n${clr}${timeStamp}${dashes}${clr_reset}\n"
   # make the last line as long as the first line, only dashes
   local lastLine=$(printf "%*s"  ${#firstLine} | tr ' ' '-')
-
-
-  if [[ "$LEVEL" =~ (FAIL|OK) ]];  then
-    lastLine=$firstLine
-    unset firstLine
+  lastLine="\n${lastLine}"
+  # for Level FAIL and OK, replace the lastLine with firstLine and clear firstLine
+  # for Level INFO and DEBUG don't print lastLine header
+  if [[ "$LEVEL" =~ (INFO|DEBUG) ]]; then
+    unset lastLine
   fi
-  echo -e "\n${clr}${firstLine}${clr_reset}\n\n${message}\n\n${clr}$lastLine${clr_reset}" >&2
+  local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
+  if [[ "$LEVEL" =~ (FAIL|OK) ]];  then
+   local printedMSG="\n${clr}${timeStamp} ${clr_reset} ${message}"
+  fi
+  # print formatted message
+  echo -e "${printedMSG}" >&2
+  # set xtrace to state before this function was called
   $xtrace_was_on && set -x
+  return 0
 }
 
 writeINF() {
