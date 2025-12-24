@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.1.0](#v2.1.0)|added version check in library.sh, force
 |[v2.0.0](#v2.0.0)|changed assumed location for dev repository
 |[v1.2.0](#v1.2.0)|added version validation
 |[v1.1.2](#v1.1.2)|removed demo
@@ -44,6 +45,17 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.1.0
+
+added:
+
+- implemented ops::version::isSupported into library.sh
+- added -f / --force to library.sh so it will unload the stopblock before (re)loading
+
+changed:
+
+- changed log functions, to use less console lines
 
 # v2.0.0
 
