@@ -7,6 +7,7 @@
     unset minVersion
 
     # process script arguments
+    source $OPSCLI_PATH/_common/splitArgs.sh
     local arguments=($(ops::common::splitArgs "$@"))
 
     # now process all arguments
