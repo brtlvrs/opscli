@@ -59,10 +59,12 @@ function ops::console::write() {
     ;;
     fail|FAIL|false|FALSE|False|Fail)
       clr="$blackOnRed"
+      clr="${red}"
       LEVEL="FAIL" 
     ;;
     true|TRUE|True|OK|Ok|ok)
       clr="$blackOnGreen"
+      clr="${green}"
       LEVEL="OK"
     ;;
     todo|TODO|Todo)
@@ -76,7 +78,7 @@ function ops::console::write() {
   esac
 
   # format the firstline with a date and time stamp, level information and have it a consitent length of 40 characters
-  local timeStamp="[`date '+%F %H:%M:%S %z'`] $LEVEL "
+  local timeStamp="[`date '+%F %H:%M:%S %z'`] ${LEVEL}"
   local dash_length=$(($maxHeaderLength - ${#timeStamp}))
   local dashes=$(printf "%*s" $dash_length | tr ' ' '-') # dashes to add as postfix
   firstLine="\n${clr}${timeStamp}${dashes}${clr_reset}\n"
@@ -90,7 +92,7 @@ function ops::console::write() {
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
   if [[ "$LEVEL" =~ (FAIL|OK) ]];  then
-   local printedMSG="\n${clr}${timeStamp} ${clr_reset} ${message}"
+   local printedMSG="\n${clr_reset}[`date '+%F %H:%M:%S %z'`] ${clr}${level}${clr_reset} ${message}"
   fi
   # print formatted message
   echo -e "${printedMSG}" >&2
@@ -147,7 +149,7 @@ writeOK() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "ok" "$1"
+  ops::console::write "ok" "${green}✓${clr_reset} $1"
 }
 writeFAIL() {
 #-- START CHEAT --
@@ -157,7 +159,7 @@ writeFAIL() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "fail" "$1"
+  ops::console::write "fail" "${red}✗${clr_reset} $1"
 }
 writeTODO() {
 #-- START CHEAT --
