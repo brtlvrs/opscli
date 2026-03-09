@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.1.3](#v2.1.3)|bug fix ops-info
 |[v2.1.1](#v2.1.1)|bug fix version check, and argument processing
 |[v2.1.0](#v2.1.0)|added version check in library.sh, force
 |[v2.0.0](#v2.0.0)|changed assumed location for dev repository
@@ -46,6 +47,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.1.3
+
+fixed:
+
+- ops-info detection for .dev 
 
 # v.2.1.1
 
