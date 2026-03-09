@@ -57,7 +57,10 @@ EOF
         if [[ "${arguments[i]}" != "name" ]]; then
             local LIBNAME=$(ops::info::get name)
             local LIBPATH_VAR="$(echo "${LIBNAME}_PATH" | tr '[:lower:]' '[:upper:]')"
-            local isDevPath="$(grep -q "/${LIBNAME}\.dev$" <<<"${!LIBPATH_VAR}")"
+            local isDevPath=false
+            if [[ "${!LIBPATH_VAR}" =~ ${LIBNAME}\.dev$ ]]; then
+                isDevPath=true
+            fi
         fi
 
         case ${arguments[i]} in
@@ -154,6 +157,7 @@ EOF
                 else
                     local prodIsActive=" (${green}active${clr_reset})"
                 fi
+                unset isDevPath
                 # return all available parameters
                 echo "name: $(ops::info::get name)"
                 echo "git_url: $(ops::info::get git_url)"
@@ -183,5 +187,6 @@ EOF
 
 
     ops::info::get::_process-arguments "$@" || return $?
+    unset isDevPath
 }
 alias ops-info=ops::info::get
