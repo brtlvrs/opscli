@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.1.4](#v2.1.4)|refactored ops-update
 |[v2.1.3](#v2.1.3)|bug fix ops-info
 |[v2.1.1](#v2.1.1)|bug fix version check, and argument processing
 |[v2.1.0](#v2.1.0)|added version check in library.sh, force
@@ -47,6 +48,13 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.1.4
+
+changed:
+
+- changed some writeWRN into writeFAIL for ops-update
+- changed the reload of the library, stepped away from using the alias
 
 # v2.1.3
 
