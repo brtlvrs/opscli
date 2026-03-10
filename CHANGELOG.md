@@ -4,6 +4,7 @@
 |version|Worked
 |---|---|
 |[v2.2.0](#v2.2.0)|added writeNote for simple formatted echoing
+|[v2.1.4](#v2.1.4)|refactored ops-update
 |[v2.1.3](#v2.1.3)|bug fix ops-info
 |[v2.1.1](#v2.1.1)|bug fix version check, and argument processing
 |[v2.1.0](#v2.1.0)|added version check in library.sh, force
@@ -52,6 +53,13 @@ Version format is ```<major>.<minor>.<patch>```
 # v2.2.0
 
 - introducing writeNOTE, which is formatted same as writeFAIL or writeOK but using the color grey for the whole line.
+
+# v2.1.4
+
+changed:
+
+- changed some writeWRN into writeFAIL for ops-update
+- changed the reload of the library, stepped away from using the alias
 
 # v2.1.3
 
