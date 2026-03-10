@@ -12,12 +12,12 @@ function ops::functions::update() {
   local LIBNAME=$(ops::info::get name | tr '[:lower:]' '[:upper:]')
   local LIBPATH_VAR="${LIBNAME}_PATH"
   if [[ ! -v "$LIBPATH_VAR" ]];  then
-      writeWRN "Couldn't find environment var $LIBPATH_VAR. Cannot update"
+      writeFAIL "Couldn't find environment var $LIBPATH_VAR. Cannot update"
       return 1
   fi
   local DEV_PATH="$(ops::info::get dev_path)"
   if  [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
-      writeWRN "$LIB_PATH environment variable points to a dev(elopment) folder, cowardly ignoring update."
+      writeFAIL "$LIB_PATH environment variable points to a dev(elopment) folder, cowardly ignoring update."
       return 1
   fi
 
@@ -29,7 +29,7 @@ function ops::functions::update() {
     writeINF "No tag defined, looking for the newest version tag."
     tag=$(git tag -l 'v*.*.*' | sort -V | tail -1)
     if [[ $? -ne 0 || -z "$tag" ]]; then
-      writeWRN "Failed to determine latest version tag."
+      writeFAIL "Failed to determine latest version tag."
       return 1
     fi
   fi
@@ -48,8 +48,9 @@ function ops::functions::update() {
     return 1
   fi
 
-  writeINF "Successfully changed $(ops::info::get name) to $tag"
-  ops-reload
+  writeOK "Successfully changed $(ops::info::get name) to $tag"
+  # reload library
+  source $OPSCLI_PATH/library.sh -f
 }
 
 alias ops-update=ops::functions::update
