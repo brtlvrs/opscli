@@ -28,7 +28,7 @@ function ops::console::write() {
   local red="\033[91m"
   local magenta="\033[95m"
   local blue="\033[94m"
-  local gray="\033[90m"
+  local grey="\033[90m"
   local whiteOnBlue="\033[97;44m"
   local whiteOnGreen="\033[97;42m"
   local whiteOnRed="\033[97;41m"
@@ -56,6 +56,10 @@ function ops::console::write() {
         # we don't want to know debug level
         return 0
       fi
+    ;;
+    note|NOTE)
+      clr="${grey}"
+      LEVEL="NOTE"
     ;;
     fail|FAIL|false|FALSE|False|Fail)
       clr="$blackOnRed"
@@ -91,8 +95,12 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK) ]];  then
-   local printedMSG="\n${clr_reset}[`date '+%F %H:%M:%S %z'`] ${clr}${level}${clr_reset} ${message}"
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE) ]];  then
+      local final_msg="${clr_reset}${message}"
+      if [[ "$LEVEL" =~ (NOTE) ]]; then
+        local final_msg="${message}${clr_reset}"
+      fi
+    local printedMSG="\n${clr}[`date '+%F %H:%M:%S %z'`] ${clr}${level} ${final_msg}"
   fi
   # print formatted message
   echo -e "${printedMSG}" >&2
@@ -160,6 +168,16 @@ writeFAIL() {
 #           $1 :  message
 #-- END CHEAT --
   ops::console::write "fail" "${red}✗${clr_reset} $1"
+}
+writeNOTE() {
+#-- START CHEAT --
+#  Function: writeNOTE
+#    Alias:  
+#    Description: Displaying NOTE with custom message. Usefull for validation / healthcheck tasks
+#    Parameters:
+#           $1 :  message
+#-- END CHEAT --
+  ops::console::write "note" "$1"
 }
 writeTODO() {
 #-- START CHEAT --
