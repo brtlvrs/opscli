@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.2.1](#v2.2.1)|bug fixes in develop, show and http tools|
 |[v2.2.0](#v2.2.0)|added writeNote for simple formatted echoing
 |[v2.1.4](#v2.1.4)|refactored ops-update
 |[v2.1.3](#v2.1.3)|bug fix ops-info
@@ -49,6 +50,15 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.2.1
+
+fixed:
+
+- functions/develop.sh: missing `[[ ]]` around `-d` test, missing space in `[[ ]]`, duplicate `git` and misplaced `!` in `ls-remote` condition
+- functions/show.sh: `--help` was calling `ops::fly::login::_usage` instead of `ops::functions::show::_usage`
+- tools/http_response.sh: curl exit code was lost due to combining `local` and assignment on one line
+- tools/http_test.sh: same curl exit code fix as http_response.sh
 
 # v2.2.0
 

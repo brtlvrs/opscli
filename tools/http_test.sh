@@ -76,7 +76,8 @@ EOF
   unset quit
   ops::http::test_connection::_process-arguments "$@" || return $?
   ops::http::test_connection::_guardrails "$@" || return $?
-  local http_code="$(curl --max-time 5 ${skip_ssl} -s -o /dev/null -w  "%{http_code}" "${url}")"
+  local http_code
+  http_code="$(curl --max-time 5 ${skip_ssl} -s -o /dev/null -w  "%{http_code}" "${url}")"
   if [ $? -ne 0 ]; then
     writeWRN "Failed to run curl against ${url}"
     return 1

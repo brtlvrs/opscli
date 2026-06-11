@@ -13,18 +13,18 @@ function ops::functions::init_dev() {
         return 0
     fi
 
-    if ! -d "$(ops::info::get dev_path)"; then
+    if [[ ! -d "$(ops::info::get dev_path)" ]]; then
         writeINF "Development path does not exist: $(ops::info::get dev_path), let's create it"
         mkdir ../dev
         git clone "$(ops::info::get git_url)" "$(ops::info::get dev_path)"
-        if [[$? -ne 0]]; then
+        if [[ $? -ne 0 ]]; then
             writeERR "Failed to clone repository to development path."
             return 1
         fi
         cd "$(ops::info::get dev_path)"
         local branch="dev"
         local remote="origin"
-        if git ! git ls-remote --exit-code --heads "$remote" "$branch" >/dev/null 2>&1; then
+        if ! git ls-remote --exit-code --heads "$remote" "$branch" >/dev/null 2>&1; then
             writeINF "dev branch not found on remote, creating it."
             git checkout -b "$branch"
             git push -u "$remote" "$branch"
