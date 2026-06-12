@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.2.4](#v2.2.4)|fix ops-update not fetching new tags|
 |[v2.2.3](#v2.2.3)|bug fixes from code review|
 |[v2.2.2](#v2.2.2)|bug fixes and set -u compatibility|
 |[v2.2.1](#v2.2.1)|bug fixes in develop, show and http tools|
@@ -52,6 +53,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.2.4
+
+fixed:
+
+- functions/update.sh: git fetch --all does not reliably fetch new tags; changed to git fetch --all --tags so ops-update finds the latest version tag without requiring a manual git fetch first
 
 # v2.2.3
 
