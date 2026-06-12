@@ -24,7 +24,7 @@ function ops::functions::update() {
   local tag=$1
   local currentPath=$(pwd)
   cd "${!LIBPATH_VAR}"
-  git fetch --all
+  git fetch --all --tags
   if [[ -z "$tag" ]]; then
     writeINF "No tag defined, looking for the newest version tag."
     tag=$(git tag -l 'v*.*.*' | sort -V | tail -1)
