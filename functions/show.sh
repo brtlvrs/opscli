@@ -59,7 +59,7 @@ EOF
         case ${arguments[i]} in
             -h | --help)
                 # show help message
-                ops::fly::login::_usage
+                ops::functions::show::_usage
                 return 1 # exit parent function with return 0
                 ;;
             -f | --full)
