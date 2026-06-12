@@ -77,13 +77,13 @@ EOF
   ops::http::status_code::_process-arguments "$@"  || return $?
   ops::http::status_code::_guardrails "$@" || return $?
   local http_code
-  http_code="$(curl --max-time 5 ${skip_ssl} -s -o /dev/null -w  "%{http_code}" "${url}")"
+  http_code="$(curl --max-time 5 ${skip_ssl:-} -s -o /dev/null -w  "%{http_code}" "${url}")"
   if [ $? -ne 0 ]; then
     writeWRN "Failed to run curl against ${url}"
     return 1
   fi
   # Echo result
-  [ -z "$quit" ] && echo "${http_code}"
+  [ -z "${quit:-}" ] && echo "${http_code}"
   # check if we have the expected http response
   if [[ "${http_code}" =~ ${status} ]]; then
     return 0

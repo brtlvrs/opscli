@@ -110,7 +110,7 @@ EOF
                     echo ""
                     return 0
                 fi
-                if grep -q "${LIBMAME}.dev$" <<<"${!LIBPATH_VAR}"; then
+                if grep -q "${LIBNAME}.dev$" <<<"${!LIBPATH_VAR}"; then
                     # in dev path, no prod path available
                     echo "${!LIBPATH_VAR}"
                     return 0
@@ -153,9 +153,9 @@ EOF
                 local devIsActive=""
                 local prodIsActive=""
                 if $isDevPath; then
-                    local devIsActive=" (${green}active${clr_reset})"
+                    local devIsActive=" (${green:-}active${clr_reset:-})"
                 else
-                    local prodIsActive=" (${green}active${clr_reset})"
+                    local prodIsActive=" (${green:-}active${clr_reset:-})"
                 fi
                 unset isDevPath
                 # return all available parameters

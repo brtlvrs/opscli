@@ -16,7 +16,7 @@ function ops::trap::cleanupTMP() {
     echo "DEBUG is set, not cleaning up subfolders starting with .$$ under $HOME"
     return 0
   fi
-  rm -rf "$HOME/.$$.**"
+  rm -rf $HOME/.$$.**
 }
 
 function ops::trap::Exit() {
@@ -39,7 +39,7 @@ function ops::trap::CTRLC() {
 #-- END CHEAT --  
   # avoid multiple executions
 
-  if [[ $trapCTRLC_ran -gt 0 ]]; then
+  if [[ ${trapCTRLC_ran:-0} -gt 0 ]]; then
     return
   fi
   export trapCTRLC_ran=1

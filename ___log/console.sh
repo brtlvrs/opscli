@@ -52,7 +52,7 @@ function ops::console::write() {
     debug|DEBUG|Debug|DBG|dbg|Dbg)
       clr="${grey}" # magenta
       LEVEL="DEBUG" 
-      if [[ "z${debug}" == "z" ]] && [[ "z${DEBUG}" == "z" ]]; then
+      if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
         return 0
       fi
@@ -78,6 +78,7 @@ function ops::console::write() {
     ;;
     *)
       ops::console::write "error" "Unknown log level $level for msg: $msg"
+      return 1
     ;;
   esac
 
