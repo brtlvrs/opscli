@@ -74,7 +74,7 @@ function ops::console::write() {
     todo|TODO|Todo)
       clr="${yellow}"
       LEVEL="TODO at line ${BASH_LINENO[1]} in ${FUNCNAME[2]} in ${BASH_SOURCE[2]}"
-      msg="TODO: $msg"
+      message="TODO: $message"
     ;;
     *)
       ops::console::write "error" "Unknown log level $level for msg: $msg"

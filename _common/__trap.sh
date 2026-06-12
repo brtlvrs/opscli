@@ -44,8 +44,9 @@ function ops::trap::CTRLC() {
   fi
   export trapCTRLC_ran=1
   # perform cleanup
+  local trapped_exit=$?
   ops::trap::cleanupTMP
-  writeWRN "Script interrupted by user (CTRLC) or error $? occurred."
+  writeWRN "Script interrupted by user (CTRLC) or error $trapped_exit occurred."
     if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         exit 1
     else

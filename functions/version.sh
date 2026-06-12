@@ -132,7 +132,7 @@ EOF
     }
 
     #-- main function code starts here --
-    [[ $0 == bash && $0 == -bash ]] && ops::common::banner
+    [[ $0 == bash || $0 == -bash ]] && ops::common::banner
     ops::version::isSupported::_guardrails "$@" || return $?
     ops::version::isSupported::_process-arguments "$@" || return $?
     ops::version::isSupported::_versionCheck "${minVersion}"

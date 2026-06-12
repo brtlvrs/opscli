@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.2.3](#v2.2.3)|bug fixes from code review|
 |[v2.2.2](#v2.2.2)|bug fixes and set -u compatibility|
 |[v2.2.1](#v2.2.1)|bug fixes in develop, show and http tools|
 |[v2.2.0](#v2.2.0)|added writeNote for simple formatted echoing
@@ -51,6 +52,15 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.2.3
+
+fixed:
+
+- functions/version.sh: banner condition used && instead of || so ops::common::banner was never called
+- functions/update.sh: error message referenced undefined $LIB_PATH instead of $LIBPATH_VAR
+- ___log/console.sh: writeTODO prepended "TODO: " to wrong variable ($msg instead of $message), so prefix was silently lost
+- _common/__trap.sh: $? in CTRLC error message was from cleanupTMP, not the original triggering error; now captured before cleanup runs
 
 # v2.2.2
 

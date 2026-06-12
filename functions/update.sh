@@ -17,7 +17,7 @@ function ops::functions::update() {
   fi
   local DEV_PATH="$(ops::info::get dev_path)"
   if  [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
-      writeFAIL "$LIB_PATH environment variable points to a dev(elopment) folder, cowardly ignoring update."
+      writeFAIL "$LIBPATH_VAR environment variable points to a dev(elopment) folder, cowardly ignoring update."
       return 1
   fi
 
