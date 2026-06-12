@@ -15,15 +15,16 @@ function ops::functions::update() {
       writeFAIL "Couldn't find environment var $LIBPATH_VAR. Cannot update"
       return 1
   fi
+  local target_path="${!LIBPATH_VAR}"
   local DEV_PATH="$(ops::info::get dev_path)"
   if [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
-      writeINF "Currently running from dev environment, switching to production first."
-      source "$(ops::info::get prod_path)/library.sh" -f
+      writeINF "Currently running from dev environment, will update and switch to production."
+      target_path="$(ops::info::get prod_path)"
   fi
 
   local tag=$1
   local currentPath=$(pwd)
-  cd "${!LIBPATH_VAR}"
+  cd "${target_path}"
   git fetch --all --tags
   if [[ -z "$tag" ]]; then
     writeINF "No tag defined, looking for the newest version tag."
@@ -41,8 +42,8 @@ function ops::functions::update() {
     "
     Failed to update. Advise is to remove folder and clone the repo again, follow:
 
-      ${cyan:-}rm -rf $OPSCLI_PATH
-      cd $(dirname $OPSCLI_PATH)
+      ${cyan:-}rm -rf ${target_path}
+      cd $(dirname ${target_path})
       git clone -b <version tag> $(ops::info::get git_url) --no-checkout
       cd $(ops::info::get name)
       git checkout <version tag>${clr_reset:-}"
@@ -50,8 +51,8 @@ function ops::functions::update() {
   fi
 
   writeOK "Successfully changed $(ops::info::get name) to $tag"
-  # reload library
-  source $OPSCLI_PATH/library.sh -f
+  # reload library from target (prod) path
+  source "${target_path}/library.sh" -f
 }
 
 alias ops-update=ops::functions::update

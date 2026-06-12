@@ -56,6 +56,13 @@ Version format is ```<major>.<minor>.<patch>```
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
 
+# v2.3.1
+
+fixed:
+
+- functions/update.sh: sourcing prod library mid-function triggered the cleanup loop twice, leaving ops::functions::update undefined after ops-update returned; replaced mid-function source with a local target_path variable and a single reload at the end
+- functions/update.sh: failure-path error message referenced $OPSCLI_PATH instead of target_path, showing the wrong path when running from dev
+
 # v2.3.0
 
 changed:
