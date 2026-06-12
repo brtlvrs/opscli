@@ -16,9 +16,9 @@ function ops::functions::update() {
       return 1
   fi
   local DEV_PATH="$(ops::info::get dev_path)"
-  if  [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
-      writeFAIL "$LIBPATH_VAR environment variable points to a dev(elopment) folder, cowardly ignoring update."
-      return 1
+  if [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
+      writeINF "Currently running from dev environment, switching to production first."
+      source "$(ops::info::get prod_path)/library.sh" -f
   fi
 
   local tag=$1

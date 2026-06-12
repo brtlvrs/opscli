@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.3.0](#v2.3.0)|ops-update auto-switches to prod when running from dev|
 |[v2.2.5](#v2.2.5)|fix ops-prod and ops-dev not reloading the library|
 |[v2.2.4](#v2.2.4)|fix ops-update not fetching new tags|
 |[v2.2.3](#v2.2.3)|bug fixes from code review|
@@ -54,6 +55,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.3.0
+
+changed:
+
+- functions/update.sh: ops-update now automatically switches to the production environment (sources prod library.sh -f) when invoked from the dev clone, instead of refusing with an error. No manual ops-prod required before running ops-update.
 
 # v2.2.5
 
