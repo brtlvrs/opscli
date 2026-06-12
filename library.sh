@@ -80,7 +80,10 @@ fi
 # cleanup library functions before loading them (again)
 for func in $(compgen -A function); do
 	if [[ $func == ops::* || $func == write* || $func == log* ]]; then
-			# removing all functions starting with ops:: write or log
+			# skip functions currently on the call stack: unsetting a function
+			# while it is executing and redefining it in the same source call
+			# causes bash to silently drop the redefinition on return
+			[[ " ${FUNCNAME[*]} " == *" $func "* ]] && continue
 			unset -f "$func"
 	fi
 done
