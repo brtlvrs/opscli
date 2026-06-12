@@ -147,7 +147,7 @@ fi
 writeINF "$welcomeMSG"
 
 
-if [[ $0 != BASH ]] && [[ $0 != -bash ]] && [[ $0  != */bash ]]; then
+if [[ $0 != bash ]] && [[ $0 != -bash ]] && [[ $0  != */bash ]]; then
   # we are sourced from a script
   writeDBG "Sourced from script: $(realpath $0)"
   return 0

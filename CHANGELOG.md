@@ -3,6 +3,8 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.2.3](#v2.2.3)|bug fixes from code review|
+|[v2.2.2](#v2.2.2)|bug fixes and set -u compatibility|
 |[v2.2.1](#v2.2.1)|bug fixes in develop, show and http tools|
 |[v2.2.0](#v2.2.0)|added writeNote for simple formatted echoing
 |[v2.1.4](#v2.1.4)|refactored ops-update
@@ -50,6 +52,28 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.2.3
+
+fixed:
+
+- functions/version.sh: banner condition used && instead of || so ops::common::banner was never called
+- functions/update.sh: error message referenced undefined $LIB_PATH instead of $LIBPATH_VAR
+- ___log/console.sh: writeTODO prepended "TODO: " to wrong variable ($msg instead of $message), so prefix was silently lost
+- _common/__trap.sh: $? in CTRLC error message was from cleanupTMP, not the original triggering error; now captured before cleanup runs
+
+# v2.2.2
+
+fixed:
+
+- _common/__trap.sh: rm glob was quoted so temp dirs created by shellTMPdir were never cleaned up on exit
+- _common/__trap.sh: ${trapCTRLC_ran:-0} guard for set -u compatibility
+- functions/update.sh: git reset --hard exit code was lost because cd overwrote $? before the check
+- library.sh: uppercase BASH in guard condition meant writeOK was never shown when sourced from an interactive shell
+- info/info.sh: typo LIBMAME instead of LIBNAME broke dev-path detection
+- console.sh: ${debug}/${DEBUG} check replaced with [[ ! -v debug && ! -v DEBUG ]] for set -u compatibility; added return after unknown log level to prevent fall-through with unset $LEVEL
+- tools/http_response.sh + http_test.sh: ${skip_ssl:-} and ${quit:-} for set -u compatibility
+- info/info.sh, functions/update.sh, _common/banner.sh: color variable references guarded with :- defaults for set -u compatibility
 
 # v2.2.1
 

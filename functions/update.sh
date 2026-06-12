@@ -17,7 +17,7 @@ function ops::functions::update() {
   fi
   local DEV_PATH="$(ops::info::get dev_path)"
   if  [[ "$DEV_PATH" == "${!LIBPATH_VAR}" ]]; then
-      writeFAIL "$LIB_PATH environment variable points to a dev(elopment) folder, cowardly ignoring update."
+      writeFAIL "$LIBPATH_VAR environment variable points to a dev(elopment) folder, cowardly ignoring update."
       return 1
   fi
 
@@ -34,17 +34,18 @@ function ops::functions::update() {
     fi
   fi
   git reset --hard $tag
+  local reset_exit=$?
   cd $currentPath
-  if [[ $? -gt 0 ]]; then
+  if [[ $reset_exit -gt 0 ]]; then
     writeWRN \
     "
     Failed to update. Advise is to remove folder and clone the repo again, follow:
 
-      ${cyan}rm -rf $OPSCLI_PATH
+      ${cyan:-}rm -rf $OPSCLI_PATH
       cd $(dirname $OPSCLI_PATH)
       git clone -b <version tag> $(ops::info::get git_url) --no-checkout
       cd $(ops::info::get name)
-      git checkout <version tag>${clr_reset}"
+      git checkout <version tag>${clr_reset:-}"
     return 1
   fi
 

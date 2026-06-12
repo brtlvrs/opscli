@@ -52,7 +52,7 @@ function ops::console::write() {
     debug|DEBUG|Debug|DBG|dbg|Dbg)
       clr="${grey}" # magenta
       LEVEL="DEBUG" 
-      if [[ "z${debug}" == "z" ]] && [[ "z${DEBUG}" == "z" ]]; then
+      if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
         return 0
       fi
@@ -74,10 +74,11 @@ function ops::console::write() {
     todo|TODO|Todo)
       clr="${yellow}"
       LEVEL="TODO at line ${BASH_LINENO[1]} in ${FUNCNAME[2]} in ${BASH_SOURCE[2]}"
-      msg="TODO: $msg"
+      message="TODO: $message"
     ;;
     *)
       ops::console::write "error" "Unknown log level $level for msg: $msg"
+      return 1
     ;;
   esac
 
