@@ -28,7 +28,7 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-dev='unset ${stopBlock};source $(ops::info::get dev_path)/library.sh'
+  alias ops-dev="unset ${stopBlock} && source \$(ops::info::get dev_path)/library.sh"
 #-- START CHEAT --
 #  Function: 
 #    Alias: ops-prod
@@ -36,5 +36,5 @@ alias shellTMP='mktemp -p $(shellTMPdir)'
 #    Usage:
 #    Parameters:
 #-- END CHEAT --
-  alias ops-prod='unset ${stopBlock};source $(ops::info::get prod_path)/library.sh'
+  alias ops-prod="unset ${stopBlock} && source \$(ops::info::get prod_path)/library.sh"
 unset stopBlock
