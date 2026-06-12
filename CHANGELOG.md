@@ -3,6 +3,8 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.3.2](#v2.3.2)|fix ops-update losing its function definition after reload|
+|[v2.3.1](#v2.3.1)|fix ops-update not reloading correctly from prod|
 |[v2.3.0](#v2.3.0)|ops-update auto-switches to prod when running from dev|
 |[v2.2.5](#v2.2.5)|fix ops-prod and ops-dev not reloading the library|
 |[v2.2.4](#v2.2.4)|fix ops-update not fetching new tags|
@@ -55,6 +57,19 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.3.2
+
+fixed:
+
+- library.sh: cleanup loop unset ops::functions::update while it was on the call stack (ops-update sources library.sh at the end of its run); bash silently drops the redefinition on return, leaving the function undefined after ops-update completes; fix skips unset for functions currently in FUNCNAME — they still get the new definition from sourceFolder, only the unset that triggers the bash quirk is skipped; normal ops-reload is unaffected (FUNCNAME is empty, full clean slate as before)
+
+# v2.3.1
+
+fixed:
+
+- functions/update.sh: sourcing prod library mid-function triggered the cleanup loop twice, leaving ops::functions::update undefined after ops-update returned; replaced mid-function source with a local target_path variable and a single reload at the end
+- functions/update.sh: failure-path error message referenced $OPSCLI_PATH instead of target_path, showing the wrong path when running from dev
 
 # v2.3.0
 
