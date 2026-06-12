@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.2.5](#v2.2.5)|fix ops-prod and ops-dev not reloading the library|
 |[v2.2.4](#v2.2.4)|fix ops-update not fetching new tags|
 |[v2.2.3](#v2.2.3)|bug fixes from code review|
 |[v2.2.2](#v2.2.2)|bug fixes and set -u compatibility|
@@ -53,6 +54,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.2.5
+
+fixed:
+
+- _common/_lib-env.sh: ops-prod and ops-dev used single-quoted aliases so ${stopBlock} expanded at execution time when stopBlock was already unset, making the unset a no-op and the stop-block preventing the library from reloading; switched to double quotes so ${stopBlock} expands at definition time (matching how ops-reload works in library.sh)
 
 # v2.2.4
 
