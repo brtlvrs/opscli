@@ -108,6 +108,11 @@ source $OPSCLI_PATH/_common/sourceFolder.sh
 #   from this point on all opscli functions are available and can be used
 ops::common::sourceFolder "$OPSCLI_PATH" || exit_with_error=true
 [[ -n ${exit_with_error+x} ]] && $exitErr_cmd
+
+# Load user extensions if OPSCLI_EXTENSIONS_PATH is set
+if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" && -d "${OPSCLI_EXTENSIONS_PATH}" ]]; then
+  ops::common::sourceFolder "$OPSCLI_EXTENSIONS_PATH"
+fi
 if [[ -n "${minVersion+x}" ]]; then
   # check if current version is supported
   ops::version::isSupported -v "$minVersion" || {
@@ -119,6 +124,9 @@ REPOVERSION="$(ops::info::get version)"
 
 # start building welcome message
 welcomeMSG="$(ops::info::get name) library (version ${magenta}$REPOVERSION${clr_reset}) is loaded."
+if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" && -d "${OPSCLI_EXTENSIONS_PATH}" ]]; then
+  welcomeMSG="${welcomeMSG} Extensions loaded from ${cyan}${OPSCLI_EXTENSIONS_PATH}${clr_reset}."
+fi
 
 # Detect if we are running in a Concourse Task
 # if so, setup the BASH environment for the target foundation if ENV_TARGET is set

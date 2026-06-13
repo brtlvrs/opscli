@@ -3,6 +3,8 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.4.1](#v2.4.1)|add What's new section to README|
+|[v2.4.0](#v2.4.0)|two-repo extensions support: OPSCLI_EXTENSIONS_PATH and ops-init-extensions|
 |[v2.3.3](#v2.3.3)|rewrite README.md|
 |[v2.3.2](#v2.3.2)|fix ops-update losing its function definition after reload|
 |[v2.3.1](#v2.3.1)|fix ops-update not reloading correctly from prod|
@@ -58,6 +60,20 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.4.1
+
+changed:
+
+- README.md: added "What's new" section summarising v2.4.0 extensions support with a link to CHANGELOG
+
+# v2.4.0
+
+added:
+
+- library.sh: auto-source `$OPSCLI_EXTENSIONS_PATH` after the framework loads, if set and valid; welcome message notes which extensions path was loaded
+- functions/extensions.sh: `ops-init-extensions` (`ops::extensions::init`) — initializes a user extensions repo at `$OPSCLI_EXTENSIONS_PATH` with git init and a demo function (`ops-hello`)
+- README.md: rewritten around the two-repo model (framework + separate user extensions repo)
 
 # v2.3.3
 
