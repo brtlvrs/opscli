@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.4.1](#v2.4.1)|add What's new section to README|
 |[v2.4.0](#v2.4.0)|two-repo extensions support: OPSCLI_EXTENSIONS_PATH and ops-init-extensions|
 |[v2.3.3](#v2.3.3)|rewrite README.md|
 |[v2.3.2](#v2.3.2)|fix ops-update losing its function definition after reload|
@@ -59,6 +60,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.4.1
+
+changed:
+
+- README.md: added "What's new" section summarising v2.4.0 extensions support with a link to CHANGELOG
 
 # v2.4.0
 

@@ -11,6 +11,10 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 > **Fork this repository** if you want to contribute to the framework. To add your own functions, create a separate extensions repo — see [Extensions](#extensions).
 
+## What's new
+
+**v2.4.0** — Extensions support: set `OPSCLI_EXTENSIONS_PATH` to a separate repo and the framework sources it automatically on load and reload. Use `ops-init-extensions` to bootstrap a new extensions repo with a demo function. See the full [CHANGELOG](CHANGELOG.md).
+
 ## Table of contents
 
 - [How it works](#how-it-works)
