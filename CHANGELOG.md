@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.3.3](#v2.3.3)|rewrite README.md|
 |[v2.3.2](#v2.3.2)|fix ops-update losing its function definition after reload|
 |[v2.3.1](#v2.3.1)|fix ops-update not reloading correctly from prod|
 |[v2.3.0](#v2.3.0)|ops-update auto-switches to prod when running from dev|
@@ -57,6 +58,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.3.3
+
+changed:
+
+- README.md: full rewrite with accurate content reflecting current codebase — corrected paths, aliases, and .bashrc snippet; added key aliases table, ops-info key reference, console logging table, function template, and development environment sections
 
 # v2.3.2
 

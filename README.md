@@ -1,182 +1,242 @@
-# opscli repo - README
+# opscli
 
-|||
+| | |
 |:---|:---|
-|repository|opscli|
-|version|[CHANGELOG.md](CHANGELOG.md)|
-|Owner|brtlvrs|
-|License|[MIT](LICENSE.md)|
+| repository | opscli |
+| version | [CHANGELOG.md](CHANGELOG.md) |
+| owner | brtlvrs |
+| license | [MIT](LICENSE.md) |
 
-## TLDR
+A BASH shell framework that is sourced into an interactive shell (via `.bashrc`) or into scripts. It is not a compiled program — it is a library of BASH functions loaded at shell startup. The entry point is `library.sh`.
 
-This repository contains a BASH framework which can be extended by writing BASH functions in BASH files.
-These files are placed in subfolders and are sourced when the library.sh is sourced.  
-To make debugging easier we append ```set +x``` to COMMAND_PROMPT so every ```set -x``` call is closed before the shell prompt $PS1 is shown.  
-Please **fork** this repository if you want to use it (at your own risk)
+> **Fork this repository** if you want to use it as the base for your own library. Extend it by adding `.sh` files to any subfolder; they are picked up automatically on the next reload.
 
-## TOC
+## Table of contents
 
-- [Features](#features)  
-- [Installation](#installation)  
-  - [Assumptions / Prerequisites](#assumptions--prerequisites)
-  - [Steps](#steps)
-  - [.bashrc](#bashrc)
-
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Key aliases](#key-aliases)
+- [Using the library in scripts](#using-the-library-in-scripts)
+- [Console logging](#console-logging)
+- [Writing new functions](#writing-new-functions)
+- [Development environment](#development-environment)
+- [Debugging](#debugging)
 
 ## Features
 
-- disable xtrace / set +x before each prompt generation in the shell
-- structured approach of reusable BASH scripts
-- script library as a product approach
-- on-demand overview of available functions
-- on-demand overview of bash aliases
+- Auto-loads every `.sh` file under any subfolder — add a file and it is available after `ops-reload`
+- Stop-block prevents double-loading; `ops-reload` performs a clean slate reload (unsets all `ops::*`, `write*`, and `log*` functions before re-sourcing)
+- `set +x` is appended to `PROMPT_COMMAND` so `set -x` debug traces are silenced automatically before each shell prompt
+- Built-in cheatsheet: `ops-functions` and `ops-alias` parse `#-- START CHEAT --` blocks across all loaded files
+- Version enforcement: scripts can require a minimum library version via `ops::version::isSupported`
+- Structured console logging with colour-coded output levels
+- Dev/prod switching: `ops-dev` / `ops-prod` reload the library from the matching clone
+
+## Prerequisites
+
+- `bash`
+- `git`
+- `jq` (optional)
+- `yq` (optional)
 
 ## Installation
 
-### Assumptions / Prerequisites
+1. Fork this repository to your own account.
+2. Clone it under `$HOME/repos/`:
 
-- following is installed:
-  - git
-  - BASH
-  - yq (optional)
-  - jq (optional)
-- git repos are stored under $HOME/repos/
+   ```bash
+   git clone <your-fork-url> $HOME/repos/opscli
+   cd $HOME/repos/opscli
+   git checkout <version-tag>
+   ```
 
-### steps
+3. Add the following to your `~/.bashrc`:
 
-1. Fork this repository to your own project.
-2. git clone your fork (you should only have a main branch) under $HOME/repos/
-   ```BASH
-   git clone <git repo url> -b <version>
-   ``` 
-3. update .bashrc with the code below
-4. reload .bashrc
-5. run ops-update to point to the latest version
+   ```bash
+   # load opscli framework
+   if [[ -f $HOME/.opscli.dev ]]; then
+       source $HOME/repos/opscli.dev/library.sh
+   else
+       source $HOME/repos/opscli/library.sh
+   fi
+   ```
 
-Alternative instead of appending code to .bashrc just source the library.sh file by running
+   The marker file `~/.opscli.dev` is created automatically when the dev clone is active and removed when you switch back to prod.
 
-```bash
-source library.sh
-```
+4. Reload your shell:
 
-### .bashrc
+   ```bash
+   source ~/.bashrc
+   ```
 
-Append the following code to the .bashrc file
+5. Update to the latest tagged version:
 
-```bash
-#-- load opscli framework
-if [[-f $HOME/.opscli.dev ]]; then
-    # We detected the development marker file, so we source development environment
-    source $HOME/repos/dev/opscli/library.sh
-else
-    source $HOME/repos/opscli/library.sh
-fi
-```
+   ```bash
+   ops-update
+   ```
 
-### setup development environment
+## Key aliases
 
-This framework is meant to be extended with extra BASH functions to support Day2Operations.
-Adding these functions should be done in the development environment, and then promoted.
-The development environment is a new clone of this repo under the $HOME/repos/dev/ folder.
-To setup the development environment run
-
-```bash
-ops-dev-init
-```
-
-See the [development](#development) paragraph for more information
-
-## development / extending library
-
-Development is done in its own branch and not on the main branch.
-You can choose to have just a dev branch (which is automatically created when running ```ops-dev-init```)
-
-### Way of working
-
-#### In short
-
-1. In the dev branch do a ```git merge main``` and ```git push``` to update remote and to have starting point to start the development from.
-1. add, fix, change the code in the dev branch
-2. git commit these changes (and push them to the remote)
-3. Update CHANGELOG.md and update the version
-4. ```git checkout main branch```
-5. do a ```git merge --squash <deb branch>``` of the dev branch  
-   This results in stage containing everything that is done between step 1 and this step
-6. do a ```git commit -m "<version>"```
-7. ```git tag "<version>"```
-8. ```git push && git push --tags```
-9. change env to prod with ```ops-prod```
-10. update to latest version ```ops-update```
-
-This would result in a main branch which only contains commits with a version, and these commits are tagged with the corresponding version
-
-#### Version
-
-To determine the version we use semver.  
-The format is ```major.minor.patch```
-
-|type|Description|
+| Alias | Description |
 |:---|:---|
-|major|These are breaking changes. Resulting in updating code that is using functions from this library
-|minor|These are additions to the library. New functions that are introduced.
-|patch|These are bug fixes, patches of functions
+| `ops-reload` | Unload and re-source the library from `$OPSCLI_PATH` |
+| `ops-functions` | Browse the full function cheatsheet (piped through `less -R`) |
+| `ops-alias` | Show alias summary only |
+| `ops-info [key]` | Show library metadata (path, version, git url, env, …) |
+| `ops-update [tag]` | Fetch tags and reset to a version; switches to prod automatically when run from dev |
+| `ops-dev` | Reload from the development clone (`opscli.dev`) |
+| `ops-prod` | Reload from the production clone (`opscli`) |
+| `ops-init-dev` | Clone the repo into the `.dev` path and create the `dev` branch |
+| `shellTMPdir` | Create a hidden temp directory under `$HOME` |
+| `shellTMP` | Create a temp file inside a `shellTMPdir` directory |
 
-When you have multiple changes on the repo, then major trumps minor trumps patch. Meaning when you introduce a new function but als fixed a bug, then the minor index is bumped up and patch index is reset to 0.
+`ops-info` accepts a key argument to return a single value:
 
-## HOW-TO
+```bash
+ops-info version      # current version tag or branch
+ops-info git_url      # remote origin URL
+ops-info prod_path    # path to the production clone
+ops-info dev_path     # path to the development clone
+ops-info env          # "prod" or "dev"
+ops-info --all        # print all of the above
+```
 
-- [Use this library in scripts](#use-this-library-in-scripts)
-- [Log to console](#log-to-console)
-- [Debugging scripts](#debugging-scripts)
+## Using the library in scripts
 
-### use this library in scripts
-
-When this library is sourced, library.sh will create a env var OPSCLI_PATH which points to the root folder of this library. So when you want to use functions from this library in scripts, the script should start with 
+When the library is sourced, `library.sh` exports `$OPSCLI_PATH`. Scripts can use this to reload the library and enforce a minimum version:
 
 ```bash
 #!/bin/bash
 
-if [[  ! -d ${OPSCLI_PATH} ]]; then
-    echo "WARNING: failed to source opscli library, cannot run script."
-    exit 1
-fi
+[[ ! -d ${OPSCLI_PATH} ]] && { echo "WARNING: opscli not loaded."; exit 1; }
 
-# load opscli library
+unset OPSCLI_LOADED
 source ${OPSCLI_PATH}/library.sh
+ops::version::isSupported v2.0.0 || exit 1
 
-..... the rest of your code 
+# ... rest of the script
 ```
 
-### log to console
-
-Instead of using ```echo``` to output log messages to the console, this library has a set of functions to format these messages, so that these are standardized. The library knows the following log functions
-
-|||
-|:---|:---|
-|writeINF| Write the message labeled as INFO
-|writeDBG| If DEBUG environment variable is set, write the message labeled with DEBUG
-|writeWRN| Write the message labeled as WARNING. It also shows where in the code this instruction is called.
-|writeERR| Write the message labeled as ERROR. Including the position in the code where this is called.
-|writeTODO| Write the message labeled as TODO, including the position in the code from where it is called.
-
-All these functions don't write to a file, just to a console.
-These functions format the message with a log level and color. So you don't have to do this with each ```echo``` instruction. The message is formatted and written to the console with the ```echo -e``` command.  
-This makes writing multiline messages easier. For instance
+Pass `-v <version>` directly to `library.sh` to combine the source and version check in one step:
 
 ```bash
-writeINF \
-"
-This is a multiline message.
-As a demonstration.
-I could also use 
-Hello world.
-"
-
-writeWRN "Something went not as expected."
+source ${OPSCLI_PATH}/library.sh -v v2.0.0 || exit 1
 ```
 
-### Debugging scripts
+## Console logging
 
-Ofcourse you have your own way of debugging. ```set -x``` is often used to see more in depth how the script is executed.   But if you forget ``` set +x``` your console could be filled with too much info.  
-To solve this, ```set +x``` is added to the PROMPT_COMMAND variable. This string is executed before your prompt is written (PS1 environment variable).  
-This is configured in the __trap.sh file under the _common folder.
+Use these functions instead of raw `echo`. All output goes to stderr.
+
+| Function | Colour | Notes |
+|:---|:---|:---|
+| `writeINF` | cyan | General informational message |
+| `writeDBG` | grey | Only printed when `$DEBUG` or `$debug` is set |
+| `writeWRN` | yellow | Includes source file and line number |
+| `writeERR` | red | Includes source file and line number |
+| `writeOK` | green | Single-line pass / success result |
+| `writeFAIL` | red | Single-line fail / validation result |
+| `writeNOTE` | grey | Single-line subtle annotation |
+| `writeTODO` | yellow | Includes function name, file, and line number |
+
+All functions accept a single string argument and support multi-line messages via here-doc or escaped newlines:
+
+```bash
+writeINF "Library loaded successfully."
+
+writeINF \
+"
+Multi-line message:
+  line one
+  line two
+"
+
+writeWRN "Something unexpected happened."
+writeERR "Fatal: could not connect."
+```
+
+## Writing new functions
+
+Use `templates/function.tmpl` as a starting point. Every function must include a **cheat block** so it appears in `ops-functions` and `ops-alias`:
+
+```bash
+#-- START CHEAT --
+#  Function: ops::namespace::functionname
+#    Alias:  ops-myalias
+#    Description: One-line description
+#    Parameters:
+#      -h | --help   Show help
+#      $1            Some positional argument
+#-- END CHEAT --
+```
+
+Standard function structure:
+
+```bash
+function ops::namespace::name() {
+    function ops::namespace::name::_usage() { cat <<-EOF
+        usage: ops-myalias [-h] <arg>
+    EOF
+    }
+    function ops::namespace::name::_guardrails() { … }
+    function ops::namespace::name::_process-arguments() {
+        local arguments=($(ops::common::splitArgs "$@"))
+        for (( i=0; i<${#arguments[@]}; i++ )); do
+            case ${arguments[i]} in
+                -h|--help) ops::namespace::name::_usage; return 1 ;;
+            esac
+        done
+    }
+    function ops::namespace::name::_main() { … }
+
+    ops::namespace::name::_guardrails "$@" || return $?
+    ops::namespace::name::_process-arguments "$@" || return $?
+    ops::namespace::name::_main || return $?
+}
+alias ops-myalias='ops::namespace::name'
+```
+
+`ops::common::splitArgs` normalises `--key=value` into `--key value` pairs before the `case` loop.
+
+Place the file in any subfolder; it is sourced automatically on the next `ops-reload`.
+
+## Development environment
+
+The production clone lives at `$HOME/repos/opscli`.
+The development clone lives at `$HOME/repos/opscli.dev` (same `.dev` suffix convention as `.wiki`).
+
+Set up the dev environment from a running prod shell:
+
+```bash
+ops-init-dev   # clones the repo to the .dev path and creates the dev branch
+ops-dev        # switch the active library to the dev clone
+```
+
+Typical development cycle:
+
+1. `git merge main && git push` — sync the dev branch with the latest release
+2. Add or modify `.sh` files in the dev clone
+3. `ops-reload` — pick up the changes in the current shell
+4. `git commit` the changes
+5. When ready to release, follow the release process in [CLAUDE.md](CLAUDE.md)
+
+To switch back to production:
+
+```bash
+ops-prod       # reload from the production clone
+ops-update     # fast-forward to the latest version tag
+```
+
+`ops-update` automatically switches from dev to prod when invoked from the dev clone, so you do not need to run `ops-prod` first.
+
+## Debugging
+
+`set -x` is safe to use interactively. `ops::common::appendPromptCommand` prepends `set +x` to `PROMPT_COMMAND`, so xtrace is silenced automatically before the next prompt — stray `set -x` calls will not pollute your interactive shell.
+
+Enable `writeDBG` output:
+
+```bash
+export DEBUG=true   # or: debug=true
+```
+
+When `DEBUG` is set, temp directories created by `shellTMPdir` are not cleaned up on exit or `CTRL-C`, making it easier to inspect intermediate state.
