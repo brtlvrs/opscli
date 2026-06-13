@@ -7,31 +7,40 @@
 | owner | brtlvrs |
 | license | [MIT](LICENSE.md) |
 
-A BASH shell framework that is sourced into an interactive shell (via `.bashrc`) or into scripts. It is not a compiled program — it is a library of BASH functions loaded at shell startup. The entry point is `library.sh`.
+A BASH shell framework that is sourced into an interactive shell (via `.bashrc`) or into scripts. It provides a structured, reloadable function library with built-in logging, cheatsheet generation, and version management.
 
-> **Fork this repository** if you want to use it as the base for your own library. Extend it by adding `.sh` files to any subfolder; they are picked up automatically on the next reload.
+> **Fork this repository** if you want to contribute to the framework. To add your own functions, create a separate extensions repo — see [Extensions](#extensions).
 
 ## Table of contents
 
-- [Features](#features)
+- [How it works](#how-it-works)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Extensions](#extensions)
 - [Key aliases](#key-aliases)
 - [Using the library in scripts](#using-the-library-in-scripts)
 - [Console logging](#console-logging)
-- [Writing new functions](#writing-new-functions)
-- [Development environment](#development-environment)
+- [Writing functions](#writing-functions)
 - [Debugging](#debugging)
+- [Contributing to the framework](#contributing-to-the-framework)
 
-## Features
+## How it works
 
-- Auto-loads every `.sh` file under any subfolder — add a file and it is available after `ops-reload`
-- Stop-block prevents double-loading; `ops-reload` performs a clean slate reload (unsets all `ops::*`, `write*`, and `log*` functions before re-sourcing)
-- `set +x` is appended to `PROMPT_COMMAND` so `set -x` debug traces are silenced automatically before each shell prompt
-- Built-in cheatsheet: `ops-functions` and `ops-alias` parse `#-- START CHEAT --` blocks across all loaded files
-- Version enforcement: scripts can require a minimum library version via `ops::version::isSupported`
-- Structured console logging with colour-coded output levels
-- Dev/prod switching: `ops-dev` / `ops-prod` reload the library from the matching clone
+opscli uses a two-repo model:
+
+| Repo | Purpose |
+|:---|:---|
+| **opscli** (this repo) | The framework — foundational functions, logging, aliases, version management. Updated via `ops-update`. Never edit directly. |
+| **your extensions repo** | Your custom functions. A separate git repo you own and version independently. |
+
+At shell startup, `.bashrc` sources the framework. If `OPSCLI_EXTENSIONS_PATH` points to your extensions repo, the framework automatically sources it too — so `ops-reload` reloads everything in one shot.
+
+```
+.bashrc
+  └── source opscli/library.sh
+        ├── loads framework functions
+        └── sources $OPSCLI_EXTENSIONS_PATH  (if set)
+```
 
 ## Prerequisites
 
@@ -42,52 +51,83 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 ## Installation
 
-1. Fork this repository to your own account.
-2. Clone it under `$HOME/repos/`:
+1. Clone this repo under `$HOME/repos/`:
 
    ```bash
-   git clone <your-fork-url> $HOME/repos/opscli
-   cd $HOME/repos/opscli
-   git checkout <version-tag>
+   git clone <opscli-url> $HOME/repos/opscli
    ```
 
-3. Add the following to your `~/.bashrc`:
+2. Add the following to your `~/.bashrc`:
 
    ```bash
-   # load opscli framework
-   if [[ -f $HOME/.opscli.dev ]]; then
-       source $HOME/repos/opscli.dev/library.sh
-   else
-       source $HOME/repos/opscli/library.sh
-   fi
+   # point to your extensions repo (optional but recommended)
+   export OPSCLI_EXTENSIONS_PATH="$HOME/repos/my-functions"
+
+   # load the opscli framework
+   source $HOME/repos/opscli/library.sh
    ```
 
-   The marker file `~/.opscli.dev` is created automatically when the dev clone is active and removed when you switch back to prod.
-
-4. Reload your shell:
+3. Reload your shell:
 
    ```bash
    source ~/.bashrc
    ```
 
-5. Update to the latest tagged version:
+4. Update to the latest tagged version:
 
    ```bash
    ops-update
    ```
 
+## Extensions
+
+Your custom functions live in a separate repo that you create and manage. The framework sources it automatically when `OPSCLI_EXTENSIONS_PATH` is set.
+
+### Setting up your extensions repo
+
+```bash
+mkdir -p $HOME/repos/my-functions
+cd $HOME/repos/my-functions
+git init
+```
+
+Add subfolders for your functions — any `.sh` file in any subfolder is sourced automatically:
+
+```
+my-functions/
+├── kubernetes/
+│   └── helpers.sh
+├── aws/
+│   └── helpers.sh
+└── daily/
+    └── shortcuts.sh
+```
+
+Set `OPSCLI_EXTENSIONS_PATH` in your `.bashrc` (before the `source` line) and reload. Your functions are now available alongside the framework functions.
+
+### Updating the framework without affecting extensions
+
+```bash
+ops-update          # updates the framework, leaves your extensions untouched
+ops-reload          # reloads both framework and extensions
+```
+
+Because your extensions live in a separate repo, `ops-update` (which does a `git reset --hard` inside the framework repo) never touches your files.
+
+### Writing extension functions
+
+Follow the same conventions as framework functions — see [Writing functions](#writing-functions). Use the `ops::*` namespace so your functions appear in `ops-functions` and are cleaned up correctly on `ops-reload`.
+
 ## Key aliases
 
 | Alias | Description |
 |:---|:---|
-| `ops-reload` | Unload and re-source the library from `$OPSCLI_PATH` |
+| `ops-reload` | Reload the framework and extensions from their respective paths |
 | `ops-functions` | Browse the full function cheatsheet (piped through `less -R`) |
 | `ops-alias` | Show alias summary only |
 | `ops-info [key]` | Show library metadata (path, version, git url, env, …) |
-| `ops-update [tag]` | Fetch tags and reset to a version; switches to prod automatically when run from dev |
-| `ops-dev` | Reload from the development clone (`opscli.dev`) |
-| `ops-prod` | Reload from the production clone (`opscli`) |
-| `ops-init-dev` | Clone the repo into the `.dev` path and create the `dev` branch |
+| `ops-update [tag]` | Fetch tags and reset framework to a version |
+| `ops-init-extensions` | Initialize a new extensions repo at `$OPSCLI_EXTENSIONS_PATH` |
 | `shellTMPdir` | Create a hidden temp directory under `$HOME` |
 | `shellTMP` | Create a temp file inside a `shellTMPdir` directory |
 
@@ -96,8 +136,7 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 ```bash
 ops-info version      # current version tag or branch
 ops-info git_url      # remote origin URL
-ops-info prod_path    # path to the production clone
-ops-info dev_path     # path to the development clone
+ops-info prod_path    # path to the framework clone
 ops-info env          # "prod" or "dev"
 ops-info --all        # print all of the above
 ```
@@ -118,7 +157,9 @@ ops::version::isSupported v2.0.0 || exit 1
 # ... rest of the script
 ```
 
-Pass `-v <version>` directly to `library.sh` to combine the source and version check in one step:
+If `OPSCLI_EXTENSIONS_PATH` is set in the environment, extensions are loaded automatically here too.
+
+Pass `-v <version>` directly to `library.sh` to combine the source and version check:
 
 ```bash
 source ${OPSCLI_PATH}/library.sh -v v2.0.0 || exit 1
@@ -139,7 +180,7 @@ Use these functions instead of raw `echo`. All output goes to stderr.
 | `writeNOTE` | grey | Single-line subtle annotation |
 | `writeTODO` | yellow | Includes function name, file, and line number |
 
-All functions accept a single string argument and support multi-line messages via here-doc or escaped newlines:
+All functions accept a single string argument and support multi-line messages:
 
 ```bash
 writeINF "Library loaded successfully."
@@ -155,7 +196,7 @@ writeWRN "Something unexpected happened."
 writeERR "Fatal: could not connect."
 ```
 
-## Writing new functions
+## Writing functions
 
 Use `templates/function.tmpl` as a starting point. Every function must include a **cheat block** so it appears in `ops-functions` and `ops-alias`:
 
@@ -198,36 +239,7 @@ alias ops-myalias='ops::namespace::name'
 
 `ops::common::splitArgs` normalises `--key=value` into `--key value` pairs before the `case` loop.
 
-Place the file in any subfolder; it is sourced automatically on the next `ops-reload`.
-
-## Development environment
-
-The production clone lives at `$HOME/repos/opscli`.
-The development clone lives at `$HOME/repos/opscli.dev` (same `.dev` suffix convention as `.wiki`).
-
-Set up the dev environment from a running prod shell:
-
-```bash
-ops-init-dev   # clones the repo to the .dev path and creates the dev branch
-ops-dev        # switch the active library to the dev clone
-```
-
-Typical development cycle:
-
-1. `git merge main && git push` — sync the dev branch with the latest release
-2. Add or modify `.sh` files in the dev clone
-3. `ops-reload` — pick up the changes in the current shell
-4. `git commit` the changes
-5. When ready to release, follow the release process in [CLAUDE.md](CLAUDE.md)
-
-To switch back to production:
-
-```bash
-ops-prod       # reload from the production clone
-ops-update     # fast-forward to the latest version tag
-```
-
-`ops-update` automatically switches from dev to prod when invoked from the dev clone, so you do not need to run `ops-prod` first.
+Place the `.sh` file in any subfolder of your extensions repo; it is sourced automatically on the next `ops-reload`.
 
 ## Debugging
 
@@ -240,3 +252,31 @@ export DEBUG=true   # or: debug=true
 ```
 
 When `DEBUG` is set, temp directories created by `shellTMPdir` are not cleaned up on exit or `CTRL-C`, making it easier to inspect intermediate state.
+
+## Contributing to the framework
+
+To contribute changes to the framework itself (not extensions), you need both the production and development clones.
+
+### Setup
+
+```bash
+ops-init-dev    # clones the framework repo to $HOME/repos/opscli.dev and creates the dev branch
+ops-dev         # switch the active library to the dev clone
+```
+
+### Switching between environments
+
+| Alias | Description |
+|:---|:---|
+| `ops-dev` | Reload from the development clone (`opscli.dev`) |
+| `ops-prod` | Reload from the production clone (`opscli`) |
+
+`ops-update` automatically switches from dev to prod when invoked from the dev clone, so you do not need to run `ops-prod` first.
+
+### Development cycle
+
+1. `git merge main && git push` — sync the dev branch with the latest release
+2. Add or modify `.sh` files in the dev clone
+3. `ops-reload` — pick up the changes in the current shell
+4. `git commit` the changes
+5. When ready to release, follow the release process in [CLAUDE.md](CLAUDE.md)
