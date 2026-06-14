@@ -9,6 +9,29 @@ function ops::functions::init_dev() {
 #    Parameters:
 #      -h | --help   Show help
 #-- END CHEAT --
+    function ops::functions::init_dev::_usage() {
+        cat <<- EOF
+
+    Clone the opscli repo to the dev path (opscli.dev) and switch the active
+    library to it. Creates and checks out the dev branch if it does not exist.
+    Does nothing if the dev environment is already active.
+
+    Usage: ops-init-dev [-h]
+
+    Options:
+    -h | --help     Display this message
+
+EOF
+    }
+
+    local arguments=($(ops::common::splitArgs "$@"))
+    for (( i=0; i<${#arguments[@]}; i++ )); do
+        case ${arguments[i]} in
+            -h|--help) ops::functions::init_dev::_usage; return 0 ;;
+            *) writeWRN "Unknown option ${arguments[i]}"; ops::functions::init_dev::_usage; return 2 ;;
+        esac
+    done
+
     if ops::info::get env | grep -q "dev"; then
         writeINF "Already in development environment."
         return 0
