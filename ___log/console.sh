@@ -99,7 +99,7 @@ function ops::console::write() {
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
       fi
-    local printedMSG="\n${clr}[`date '+%F %H:%M:%S %z'`] ${clr}${level} ${final_msg}"
+    local printedMSG="\n${clr}[`date '+%F %H:%M:%S %z'`] ${clr}${LEVEL} ${final_msg}"
   fi
   # print formatted message
   echo -e "${printedMSG}" >&2
