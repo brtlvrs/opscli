@@ -57,11 +57,11 @@ EOF
               ;;
             -u | --url)
               url="$next_arg"
-              ((i++))
+              ((++i))
               ;;
             -s | --status)
               status="$next_arg"
-              ((i++))
+              ((++i))
               ;;
             -q | --quit)
               quit=true
@@ -80,7 +80,6 @@ EOF
               url="$arg"
 							;;
           esac
-          true # making sure $? = 0, $? =1 when i= 0 and you do ((i++))
       done
       return 0
   }

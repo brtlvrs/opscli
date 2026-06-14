@@ -28,7 +28,7 @@
                 ;;
             -v| --version)
                 minVersion=${next_arg}
-                ((i++)) # skip next argument
+                ((++i))
                 ;;
             *)
                 # unknown option

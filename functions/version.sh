@@ -57,7 +57,7 @@ EOF
               ;;
           -v | --version)
               MINVERSION=${next_arg}
-              ((i++))
+              ((++i))
               ;;
           -s | --silent)
               # silent mode, do nothing
