@@ -59,9 +59,8 @@ EOF
     for (( i = 0; i < ${#arguments[@]}; i++)); do
         case ${arguments[i]} in
             -h | --help)
-                # show help message
                 ops::functions::show::_usage
-                return 1 # exit parent function with return 0
+                return 0
                 ;;
             -f | --full)
                 # The concourse team to request the token for

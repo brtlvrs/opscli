@@ -52,9 +52,8 @@ EOF
       fi
       case $arg in
           -h | --help)
-              # show help message
               ops::version::isSupported::_usage
-              return 1 # exit parent function with return 0
+              return 0
               ;;
           -v | --version)
               MINVERSION=${next_arg}
