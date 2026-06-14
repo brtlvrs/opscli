@@ -12,12 +12,16 @@ function ops::http::test_connection() {
   
    function ops::http::test_connection::_usage() {
     cat <<- EOF
-    
-    command options:
 
-    -u | --url      url to check status code for
-    -q | --quit     Don't return status code, only succeed or fail
-    -k              skip ssl validation
+    Test whether a URL is reachable by making an HTTP request and returning
+    the HTTP status code. Exits 0 on a response, 1 on connection failure.
+
+    Usage: ops::http::test_connection [options] <url>
+
+    Options:
+    -u | --url      URL to test (http:// or https://); can also be passed as positional arg
+    -q | --quit     Suppress status code output; only return exit code
+    -k              Skip SSL certificate validation
     -h | --help     Display this message
 
 EOF

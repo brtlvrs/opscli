@@ -36,14 +36,15 @@ ops::functions::show() {
   ops::functions::show::_usage() {
     cat <<- EOF
 
-    Parse all library functions and display the cheatcode textbloks.
+    Parse all library functions and display their cheat blocks, grouped by source
+    (core, extension) and type (user-facing, internal).
 
     command options:
 
-    -f | --full              (default) display each cheatcode block and an alias summary.
+    -f | --full              (default) display each cheat block and an alias summary.
     -h | --help              Display this message
     --summary                Display only the alias summary.
-    --functions              Display only the functions 
+    --functions              Display only the function blocks
 
 EOF
   }
@@ -105,7 +106,6 @@ EOF
     for p in "${!scan_paths[@]}"; do
       local scan_path="${scan_paths[$p]}"
       local source_label="${scan_labels[$p]}"
-
 
       mapfile -t files_array < <(find "$scan_path" -mindepth 2 -type f -name '*.sh' | sort)
 

@@ -70,7 +70,6 @@ added:
 - functions/update.sh: `--beta` flag for `ops-update` — resolves and installs the latest `v*.*.*-beta.*` tag
 - functions/update.sh: default (no-argument) tag resolution now explicitly excludes pre-release tags via `grep -v -- '-'`, so a plain `ops-update` never lands on a beta
 
-
 # v2.5.0
 
 changed:

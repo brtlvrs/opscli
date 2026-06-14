@@ -23,7 +23,7 @@ function ops::version::isSupported() {
     function ops::version::isSupported::_usage() {
         cat <<-EOF
 
-        Function too be used in guardrails to check if current product version of opscli is supported.
+        Function to be used in guardrails to check if current product version of opscli is supported.
         Usage: ops::version::isSupported [options]
 
         Options:
