@@ -1,20 +1,20 @@
 #!/bin/bash
 
-function ops::functions::demo() {
+function ops::console::demo() {
 #-- START CHEAT --
-#  Function: ops::functions::demo
-#    Alias:  ops-demo
+#  Function: ops::console::demo
+#    Alias:  ops-writeDEMO
 #    Description: Demonstrate all write* console logging functions with example output
 #    Parameters:
 #      -h | --help   Show help
 #-- END CHEAT --
 
-  function ops::functions::demo::_usage() {
+  function ops::console::demo::_usage() {
     cat <<- EOF
 
     Demonstrate all write* console logging functions available in the opscli library.
 
-    Usage: ops-demo
+    Usage: ops-writeDEMO
 
     Options:
     -h | --help     Display this message
@@ -25,8 +25,8 @@ EOF
   local arguments=($(ops::common::splitArgs "$@"))
   for (( i=0; i<${#arguments[@]}; i++ )); do
     case ${arguments[i]} in
-      -h|--help) ops::functions::demo::_usage; return 0 ;;
-      *) writeWRN "Unknown option ${arguments[i]}"; ops::functions::demo::_usage; return 2 ;;
+      -h|--help) ops::console::demo::_usage; return 0 ;;
+      *) writeWRN "Unknown option ${arguments[i]}"; ops::console::demo::_usage; return 2 ;;
     esac
   done
 
@@ -43,4 +43,4 @@ EOF
   if [[ -z "$_prev_debug" ]]; then unset DEBUG; else DEBUG="$_prev_debug"; fi
 }
 
-alias ops-demo=ops::functions::demo
+alias ops-writeDEMO=ops::console::demo
