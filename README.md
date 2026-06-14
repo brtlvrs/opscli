@@ -13,7 +13,7 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 ## What's new
 
-**v2.7.1** — All `write*` console logging functions have been restyled to a compact single-line format with a coloured symbol prefix (`→`, `✓`, `✗`, `▲`, `✖`, `⚙`, `☐`, `•`). Functions that include call location (`writeWRN`, `writeERR`, `writeDBG`, `writeTODO`) now print it on a second line. Run `ops-writeDEMO` to see them all at once. See the full [CHANGELOG](CHANGELOG.md).
+**v2.7.1** — All `write*` console logging functions have been restyled to a compact single-line format with a coloured symbol prefix (`→`, `✓`, `✗`, `▲`, `✖`, `⚙`, `☐`, `•`). Functions that include call location (`writeWRN`, `writeERR`, `writeDBG`, `writeTODO`) now print it on a second line. Run `writeDEMO` to see them all at once. See the full [CHANGELOG](CHANGELOG.md).
 
 ## Table of contents
 
@@ -171,7 +171,7 @@ source ${OPSCLI_PATH}/library.sh -v v2.0.0 || exit 1
 
 ## Console logging
 
-Use these functions instead of raw `echo`. All output goes to stderr. Every function produces a compact single-line format: a coloured timestamp + label, a symbol, then the message. Run `ops-writeDEMO` to see them all in one go.
+Use these functions instead of raw `echo`. All output goes to stderr. Every function produces a compact single-line format: a coloured timestamp + label, a symbol, then the message. Run `writeDEMO` to see them all in one go.
 
 | Function | Symbol | Colour | Notes |
 |:---|:---|:---|:---|
