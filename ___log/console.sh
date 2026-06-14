@@ -47,8 +47,8 @@ function ops::console::write() {
       LEVEL="WARNING"
     ;;
     error|ERROR|Error|Err|err|ERR)
-      clr="${red}" # red
-      LEVEL="ERROR  (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
+      clr="${red}"
+      LEVEL="ERROR"
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
       clr="${yellow}"
@@ -74,8 +74,7 @@ function ops::console::write() {
     ;;
     todo|TODO|Todo)
       clr="${yellow}"
-      LEVEL="TODO at line ${BASH_LINENO[1]} in ${FUNCNAME[2]} in ${BASH_SOURCE[2]}"
-      message="TODO: $message"
+      LEVEL="TODO"
     ;;
     *)
       ops::console::write "error" "Unknown log level $level for msg: $msg"
@@ -97,7 +96,7 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG|WARNING) ]];  then
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG|WARNING|ERROR|TODO) ]];  then
       local final_msg="${clr_reset}${message}"
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
@@ -125,11 +124,12 @@ writeERR() {
 #-- START CHEAT --
 #  Function: writeERR
 #    Alias:
-#    Description: Display ERROR header with custom message to stderr; includes source file and line number
+#    Description: Display ERROR message to stderr; red timestamp header, uncoloured message, red call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "error" "$1"
+  local _location="${red}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "error" "${red}✖${clr_reset} $1\n${_location}"
 }
 writeDBG() {
 #-- START CHEAT --
@@ -187,9 +187,10 @@ writeTODO() {
 #-- START CHEAT --
 #  Function: writeTODO
 #    Alias:
-#    Description: Display TODO marker to stderr with function name, file and line number; use during development to flag incomplete code
+#    Description: Display TODO marker to stderr; yellow timestamp header, uncoloured message, yellow call location on last line; use during development to flag incomplete code
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "todo" "$1"
+  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "todo" "${yellow}✏${clr_reset} $1\n${_location}"
 }
