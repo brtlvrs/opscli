@@ -3,11 +3,12 @@
 function ops::functions::update() {
 #-- START CHEAT --
 #  Function: ops::functions::update
-#    Alias:  ops-update <version>
+#    Alias:  ops-update [--beta] [<version>]
 #    Description: Update the opscli repo under $OPSCLI_PATH location
 #    Parameters:
-#          $1  : (optional) git branch/tag to update to
-#                 when not used, it will update to the latest version
+#          --beta : update to the latest beta release (v*.*.*-beta.*)
+#          $1     : (optional) explicit git tag to update to
+#                   when not used, updates to the latest stable release
 #-- END CHEAT --
   local LIBNAME=$(ops::info::get name | tr '[:lower:]' '[:upper:]')
   local LIBPATH_VAR="${LIBNAME}_PATH"
@@ -22,16 +23,36 @@ function ops::functions::update() {
       target_path="$(ops::info::get prod_path)"
   fi
 
-  local tag=$1
+  local tag=""
+  local beta=false
+  local arguments=($(ops::common::splitArgs "$@"))
+  for (( i=0; i<${#arguments[@]}; i++ )); do
+    case ${arguments[i]} in
+      --beta) beta=true ;;
+      *)      tag="${arguments[i]}" ;;
+    esac
+  done
+
   local currentPath=$(pwd)
   cd "${target_path}"
   git fetch --all --tags
   if [[ -z "$tag" ]]; then
-    writeINF "No tag defined, looking for the newest version tag."
-    tag=$(git tag -l 'v*.*.*' | sort -V | tail -1)
-    if [[ $? -ne 0 || -z "$tag" ]]; then
-      writeFAIL "Failed to determine latest version tag."
-      return 1
+    if [[ "$beta" == true ]]; then
+      writeINF "Looking for the latest beta release tag."
+      tag=$(git tag -l 'v*.*.*' | grep -- '-beta\.' | sort -V | tail -1)
+      if [[ -z "$tag" ]]; then
+        writeFAIL "No beta release tags found."
+        cd "$currentPath"
+        return 1
+      fi
+    else
+      writeINF "No tag defined, looking for the newest stable version tag."
+      tag=$(git tag -l 'v*.*.*' | grep -v -- '-' | sort -V | tail -1)
+      if [[ $? -ne 0 || -z "$tag" ]]; then
+        writeFAIL "Failed to determine latest version tag."
+        cd "$currentPath"
+        return 1
+      fi
     fi
   fi
   git reset --hard $tag

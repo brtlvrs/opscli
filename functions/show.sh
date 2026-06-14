@@ -86,139 +86,155 @@ EOF
   }
 
   ops::functions::show::_blocks() {
-    
+
     # init vars
     declare -a files_array
-    local cheatsheet=()
     # define start and end tag
     local start_tag="-- START CHEAT --"
     local end_tag="-- END CHEAT --"
 
-    # find all bash scripts in subfolders and sort them alphabeticly
-    # ignoring the top folder of the repo
-    mapfile -t files_array < <(find "$OPSCLI_PATH" -mindepth 2 -type f -name '*.sh' | sort )
-
-    # we expected files, so exit
-    if [[ ${#files_array[@]} -eq 0 ]]; then
-      writeWRN "No script files found under $OPSCLI_PATH and it's subfolders."
-      return 1
+    declare -a scan_paths=("$OPSCLI_PATH")
+    declare -a scan_labels=("core")
+    if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" && -d "$OPSCLI_EXTENSIONS_PATH" ]]; then
+      scan_paths+=("$OPSCLI_EXTENSIONS_PATH")
+      scan_labels+=("extension")
     fi
 
-    # proces the list of bash files
-    writeDBG "We found ${#files_array[@]} to process."
-    local summary=()
-    for file in "${files_array[@]}"; do
-      writeDBG "Processing file: $file"
+    for p in "${!scan_paths[@]}"; do
+      local scan_path="${scan_paths[$p]}"
+      local source_label="${scan_labels[$p]}"
 
-      # guardrail, skipping the library.sh file (which we shouldn't have anyway in our list"
-      if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
-        writeDBG "skipping file $file"
+      mapfile -t files_array < <(find "$scan_path" -mindepth 2 -type f -name '*.sh' | sort)
+
+      if [[ ${#files_array[@]} -eq 0 ]]; then
+        writeWRN "No script files found under $scan_path and its subfolders."
         continue
       fi
-      
-      ## init var
-      local txt_block=""
-      # Find text blocks that are encapsuled with the start and end tag.
-      txt_block=$(awk -v start="$start_tag" -v end="$end_tag" -v fname="$file" '
-        {
-        line = $0
-        if (line !~ /^#/) next
-        line = substr(line, 2)
-        if ( line ~ start) { in_block=1; next}
-        if (in_block && line ~ end)  { in_block=0; print "\n" ; next }
-        if ( in_block ) {
-          if ( /Function:/) { 
-            split(line, parts, ":")
-            printf "\033[32m  Function: %s\033[95m%s\033[0m\n","", substr(line, length(parts[1])+2)
-            print "    File: \033[96m" fname "\033[0m"
+
+      writeDBG "We found ${#files_array[@]} to process in $scan_path."
+      for file in "${files_array[@]}"; do
+        writeDBG "Processing file: $file"
+
+        if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
+          writeDBG "skipping file $file"
+          continue
+        fi
+
+        local txt_block=""
+        txt_block=$(awk -v start="$start_tag" -v end="$end_tag" -v fname="$file" -v slabel="$source_label" '
+          {
+          line = $0
+          if (line !~ /^#/) next
+          line = substr(line, 2)
+          if ( line ~ start) { in_block=1; next}
+          if (in_block && line ~ end)  { in_block=0; print "\n" ; next }
+          if ( in_block ) {
+            if ( /Function:/) {
+              split(line, parts, ":")
+              if (slabel == "extension")
+                badge=" \033[93m[ext]\033[0m"
+              else
+                badge=" \033[37m[core]\033[0m"
+              printf "\033[32m  Function: %s\033[95m%s\033[0m%s\n","", substr(line, length(parts[1])+2), badge
+              print "    File: \033[96m" fname "\033[0m"
+              }
+            else if (line ~ /Alias:/) {
+              split(line, parts, ":")
+              printf "%s:\033[93m%s\033[0m\n", parts[1], parts[2]
+              next
+              }
+            else { print line }
             }
-          else if (line ~ /Alias:/) {
-            split(line, parts, ":")
-            printf "%s:\033[93m%s\033[0m\n", parts[1], parts[2]
-            next
-            } 
-          else { print line }
           }
-        }
-      ' "$file")
+        ' "$file")
 
+        if [[ -n "$txt_block" ]]; then
+          echo -e "\n$txt_block\n"
+        fi
 
-      #-- write textblock to console
-      if [[ -n "$txt_block" ]]; then
-        echo -e "\n$txt_block\n"
-      fi
-
+      done
     done
   }
 
   ops::functions::show::_aliases() {
-    
+
     # init vars
     declare -a files_array
-    local cheatsheet=()
     # define start and end tag
     local start_tag="-- START CHEAT --"
     local end_tag="-- END CHEAT --"
 
-    # find all bash scripts in subfolders and sort them alphabeticly
-    # ignoring the top folder of the repo
-    mapfile -t files_array < <(find "$OPSCLI_PATH" -mindepth 2 -type f -name '*.sh' | sort )
-
-    # we expected files, so exit
-    if [[ ${#files_array[@]} -eq 0 ]]; then
-      writeWRN "No script files found under $OPSCLI_PATH and it's subfolders."
-      return 1
+    declare -a scan_paths=("$OPSCLI_PATH")
+    declare -a scan_labels=("core")
+    if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" && -d "$OPSCLI_EXTENSIONS_PATH" ]]; then
+      scan_paths+=("$OPSCLI_EXTENSIONS_PATH")
+      scan_labels+=("extension")
     fi
 
-    # proces the list of bash files
-    writeDBG "We found ${#files_array[@]} to process."
     local summary=()
-    for file in "${files_array[@]}"; do
-      writeDBG "Processing file: $file"
+    for p in "${!scan_paths[@]}"; do
+      local scan_path="${scan_paths[$p]}"
+      local source_label="${scan_labels[$p]}"
 
-      # guardrail, skipping the library.sh file (which we shouldn't have anyway in our list"
-      if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
-        writeDBG "skipping file $file"
+      mapfile -t files_array < <(find "$scan_path" -mindepth 2 -type f -name '*.sh' | sort)
+
+      if [[ ${#files_array[@]} -eq 0 ]]; then
+        writeWRN "No script files found under $scan_path and its subfolders."
         continue
       fi
-      
-      # parse alias summary (alias : description)
-      while IFS= read -r line; do
-        summary+=("$line")
-      done < <(awk -v start="$start_tag" -v end="$end_tag" '
-        {
 
-        line = $0
-        if (line !~ /^#/) next
-        line = substr(line, 2)
-        if ( line ~ start) { in_block=1; alias=""; desc="";  next}
-        if (in_block && line ~ end)  { 
-          in_block=0
-          if ( alias != "" ) { print "";  print alias ": " desc } 
-          next }
-        if ( in_block ) {
-          if (line ~ /Alias:/) {
-            gsub(/^[ \t]+/, "", line)
-            gsub(/[ \t]+$/, "", line)
-            sub(/Alias:[ \t]*/, "", line)
-            alias=line
-          } else if (line ~ /Description:/) {
-            gsub(/^[ \t]+/, "", line)
-            gsub(/[ \t\n]+$/, "", line)
-            sub(/Description:[ \t]*/, "", line)
-            desc=line
-          } else if (line ~ /Function:/) {
-            gsub(/^[ \t]+/, "", line)
-            gsub(/[ \t]+$/, "", line)
-            sub(/Function:[ \t]*/, "", line)
-            fnc=line
+      writeDBG "We found ${#files_array[@]} to process in $scan_path."
+      for file in "${files_array[@]}"; do
+        writeDBG "Processing file: $file"
+
+        if [[ "$file" == "$OPSCLI_PATH/library.sh" ]]; then
+          writeDBG "skipping file $file"
+          continue
+        fi
+
+        while IFS= read -r line; do
+          summary+=("$line")
+        done < <(awk -v start="$start_tag" -v end="$end_tag" -v slabel="$source_label" '
+          {
+          line = $0
+          if (line !~ /^#/) next
+          line = substr(line, 2)
+          if ( line ~ start) { in_block=1; alias=""; desc=""; next}
+          if (in_block && line ~ end)  {
+            in_block=0
+            if ( alias != "" ) {
+              if (slabel == "extension")
+                badge="\033[93m[ext]\033[0m"
+              else
+                badge="\033[37m[core]\033[0m"
+              print ""
+              print alias ": " badge " " desc
+            }
+            next }
+          if ( in_block ) {
+            if (line ~ /Alias:/) {
+              gsub(/^[ \t]+/, "", line)
+              gsub(/[ \t]+$/, "", line)
+              sub(/Alias:[ \t]*/, "", line)
+              alias=line
+            } else if (line ~ /Description:/) {
+              gsub(/^[ \t]+/, "", line)
+              gsub(/[ \t\n]+$/, "", line)
+              sub(/Description:[ \t]*/, "", line)
+              desc=line
+            } else if (line ~ /Function:/) {
+              gsub(/^[ \t]+/, "", line)
+              gsub(/[ \t]+$/, "", line)
+              sub(/Function:[ \t]*/, "", line)
+              fnc=line
+              }
             }
           }
-        }
-      ' "$file")
+        ' "$file")
+      done
     done
-    # print alias summary
 
+    # print alias summary
     readarray -t sorted < <(printf '%s\n' "${summary[@]}" | sort)
     max_len=0
     aliases=()
