@@ -181,7 +181,7 @@ writeNOTE() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "note" "$1"
+  ops::console::write "note" "${grey}○${clr_reset} $1"
 }
 writeTODO() {
 #-- START CHEAT --
