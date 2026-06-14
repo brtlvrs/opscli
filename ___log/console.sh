@@ -43,8 +43,8 @@ function ops::console::write() {
       LEVEL="INFO" 
     ;;
     warning|WARNING|Warning|WARN|warn|WRN|wrn)
-      clr="${yellow}" # yellow
-      LEVEL="WARNING (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
+      clr="${yellow}"
+      LEVEL="WARNING"
     ;;
     error|ERROR|Error|Err|err|ERR)
       clr="${red}" # red
@@ -97,7 +97,7 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG) ]];  then
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG|WARNING) ]];  then
       local final_msg="${clr_reset}${message}"
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
@@ -146,11 +146,12 @@ writeWRN() {
 #-- START CHEAT --
 #  Function: writeWRN
 #    Alias:
-#    Description: Display WARNING header with custom message to stderr; includes source file and line number
+#    Description: Display WARNING message to stderr; yellow timestamp header, uncoloured message, yellow call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "warning" "$1"
+  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "warning" "$1\n${_location}"
 }
 writeOK() {
 #-- START CHEAT --
