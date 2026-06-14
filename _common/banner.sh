@@ -1,11 +1,9 @@
 function ops::common::banner() {
 #-- START CHEAT --
 #  Function: ops::common::banner
-#    Alias: 
-#    Description: Display a banner with the provided text
-#    Usage:
+#    Alias: ops-banner
+#    Description: Display the opscli ASCII art banner
 #    Parameters:
-#      $1 : Text to display in banner
 #-- END CHEAT --
     echo -e "${yellow:-}"
     cat <<- 'EOF'

@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.6.0](#v2.6.0)|ops-update: --beta flag and stable-only default tag resolution|
 |[v2.5.0](#v2.5.0)|ops-alias and ops-functions show core/extension source label|
 |[v2.4.1](#v2.4.1)|add What's new section to README|
 |[v2.4.0](#v2.4.0)|two-repo extensions support: OPSCLI_EXTENSIONS_PATH and ops-init-extensions|
@@ -61,6 +62,14 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.6.0
+
+added:
+
+- functions/update.sh: `--beta` flag for `ops-update` — resolves and installs the latest `v*.*.*-beta.*` tag
+- functions/update.sh: default (no-argument) tag resolution now explicitly excludes pre-release tags via `grep -v -- '-'`, so a plain `ops-update` never lands on a beta
+
 
 # v2.5.0
 

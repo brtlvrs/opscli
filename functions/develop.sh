@@ -5,8 +5,9 @@ function ops::functions::init_dev() {
 #-- START CHEAT --
 #  Function: ops::functions::init_dev
 #    Alias:  ops-init-dev
-#    Description: Initialize the development environment for opscli
+#    Description: Clone the opscli repo to the dev path (opscli.dev) and switch the active library to it
 #    Parameters:
+#      -h | --help   Show help
 #-- END CHEAT --
     if ops::info::get env | grep -q "dev"; then
         writeINF "Already in development environment."

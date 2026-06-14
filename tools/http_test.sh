@@ -1,10 +1,13 @@
 function ops::http::test_connection() {
 #-- START CHEAT --
 #  Function: ops::http::test_connection
-#    Alias: 
-#    Description: Test if the given url is responding
-#    Usage:
+#    Alias:
+#    Description: Test if a URL is reachable; prints the HTTP status code or exits cleanly
 #    Parameters:
+#      -u | --url    URL to test (http:// or https://)
+#      -q | --quit   Suppress status code output; only return exit code
+#      -k            Skip SSL certificate validation
+#      -h | --help   Show help
 #-- END CHEAT --
   
    function ops::http::test_connection::_usage() {
