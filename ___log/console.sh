@@ -4,6 +4,7 @@ function ops::console::write() {
 #-- START CHEAT --
 #  Function: ops::console::write
 #    Alias:
+#    Internal: true
 #    Description: Write custom message with preformatted headers to stderr
 #    Parameters:
 #          $1  : message level, INFO, DEBUG, WARNING. ERROR, OK, FAIL, TODO
