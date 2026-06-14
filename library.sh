@@ -50,6 +50,9 @@ green="\033[92m"
 red="\033[91m"
 magenta="\033[95m"
 blue="\033[94m"
+grey="\033[90m"
+blackOnGreen="\033[30;42m"
+blackOnRed="\033[30;41m"
 
 # export location of this library and create stopblock name
 

@@ -51,7 +51,7 @@ function ops::console::write() {
       LEVEL="ERROR"
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
-      clr="${yellow}"
+      clr="${grey}"
       LEVEL="DEBUG"
       if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
@@ -64,12 +64,10 @@ function ops::console::write() {
     ;;
     fail|FAIL|false|FALSE|False|Fail)
       clr="$blackOnRed"
-      clr="${red}"
-      LEVEL="FAIL" 
+      LEVEL="FAIL"
     ;;
     true|TRUE|True|OK|Ok|ok)
       clr="$blackOnGreen"
-      clr="${green}"
       LEVEL="OK"
     ;;
     todo|TODO|Todo)
@@ -101,7 +99,7 @@ function ops::console::write() {
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
       fi
-    local printedMSG="\n${clr}[`date '+%F %H:%M:%S %z'`] ${clr}${level} ${final_msg}"
+    local printedMSG="\n${clr}[`date '+%F %H:%M:%S %z'`] ${clr}${LEVEL} ${final_msg}"
   fi
   # print formatted message
   echo -e "${printedMSG}" >&2
@@ -135,12 +133,12 @@ writeDBG() {
 #-- START CHEAT --
 #  Function: writeDBG
 #    Alias:
-#    Description: Display DEBUG message to stderr; yellow timestamp header, uncoloured message, yellow call location on last line; only printed when $DEBUG or $debug is set
+#    Description: Display DEBUG message to stderr; grey timestamp header, uncoloured message, grey call location on last line; only printed when $DEBUG or $debug is set
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
-  ops::console::write "debug" "${yellow}⚙${clr_reset} $1\n${_location}"
+  local _location="${grey}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "debug" "${grey}⚙${clr_reset} $1\n${_location}"
 }
 writeWRN() {
 #-- START CHEAT --
@@ -161,7 +159,7 @@ writeOK() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "ok" "${green}✓${clr_reset} $1"
+  ops::console::write "ok" "${blackOnGreen}✓${clr_reset} $1"
 }
 writeFAIL() {
 #-- START CHEAT --
@@ -171,7 +169,7 @@ writeFAIL() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "fail" "${red}✗${clr_reset} $1"
+  ops::console::write "fail" "${blackOnRed}✗${clr_reset} $1"
 }
 writeNOTE() {
 #-- START CHEAT --

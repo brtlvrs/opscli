@@ -3,7 +3,7 @@
 function ops::console::demo() {
 #-- START CHEAT --
 #  Function: ops::console::demo
-#    Alias:  ops-writeDEMO
+#    Alias:  writeDEMO
 #    Description: Demonstrate all write* console logging functions with example output
 #    Parameters:
 #      -h | --help   Show help
@@ -14,7 +14,7 @@ function ops::console::demo() {
 
     Demonstrate all write* console logging functions available in the opscli library.
 
-    Usage: ops-writeDEMO
+    Usage: writeDEMO
 
     Options:
     -h | --help     Display this message
@@ -43,4 +43,4 @@ EOF
   if [[ -z "$_prev_debug" ]]; then unset DEBUG; else DEBUG="$_prev_debug"; fi
 }
 
-alias ops-writeDEMO=ops::console::demo
+alias writeDEMO=ops::console::demo

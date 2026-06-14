@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.7.3](#v2.7.3)|colour refinements for write* functions; level labels always uppercase; rename writeDEMO|
 |[v2.7.2](#v2.7.2)|update What's new section in README to v2.7.1|
 |[v2.7.1](#v2.7.1)|restyle all write* functions to compact single-line format with symbols; add ops-writeDEMO|
 |[v2.7.0](#v2.7.0)|internal function grouping in ops-functions; --help on ops-update and ops-init-dev; cheat block and usage fixes|
@@ -65,6 +66,18 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.7.3
+
+changed:
+
+- `___log/console.sh`: `writeERR` colour changed from magenta to red (symbol `✖` and call location line)
+- `___log/console.sh`: `writeFAIL` colour changed from red to black on red; symbol `✗` now uses `${blackOnRed}`
+- `___log/console.sh`: `writeOK` colour changed from green to black on green; symbol `✓` now uses `${blackOnGreen}`
+- `___log/console.sh`: level label in output is now always uppercase (`${LEVEL}`) regardless of how it was passed in
+- `library.sh`: added `grey`, `blackOnGreen`, `blackOnRed` as global colour variables (fixes `writeNOTE` and `writeDBG` referencing `${grey}` which was previously only a local variable)
+- `functions/demo.sh`: alias renamed from `ops-writeDEMO` to `writeDEMO`
+- `README.md`: updated console logging table to reflect new colours
 
 # v2.7.2
 
