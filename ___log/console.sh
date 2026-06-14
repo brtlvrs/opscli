@@ -51,8 +51,8 @@ function ops::console::write() {
       LEVEL="ERROR  (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
-      clr="${grey}" # magenta
-      LEVEL="DEBUG" 
+      clr="${yellow}"
+      LEVEL="DEBUG"
       if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
         return 0
@@ -97,7 +97,7 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO) ]];  then
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG) ]];  then
       local final_msg="${clr_reset}${message}"
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
@@ -135,11 +135,11 @@ writeDBG() {
 #-- START CHEAT --
 #  Function: writeDBG
 #    Alias:
-#    Description: Display DEBUG message to stderr; only printed when $DEBUG or $debug is set
+#    Description: Display single-line DEBUG message to stderr in yellow with call location; only printed when $DEBUG or $debug is set
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "debug" "$1"
+  ops::console::write "debug" "${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]}) →${clr_reset} $1"
 }
 writeWRN() {
 #-- START CHEAT --
