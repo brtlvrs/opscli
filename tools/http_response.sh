@@ -14,13 +14,16 @@ function ops::http::status_code() {
   ops::http::status_code::_usage() {
     cat <<- EOF
 
-    
-    command options:
+    Fetch the HTTP status code for a URL and validate it against a pattern.
+    Exits 0 if the status matches, 1 if it does not or if the request fails.
 
-    -u | --url      url to check status code for
-    -s | --status   (optional) regexp pattern to check HTTP status for, default is all 200 and 300 codes ^(2|3)[0-9][0-9]
-    -q | --quit     Don't return status code, only succeed or fail
-    -k              skip ssl validation
+    Usage: ops::http::status_code [options] <url>
+
+    Options:
+    -u | --url      URL to check (http:// or https://); can also be passed as positional arg
+    -s | --status   regexp to match the status code against (default: ^(2|3)[0-9][0-9])
+    -q | --quit     Suppress status code output; only return exit code
+    -k              Skip SSL certificate validation
     -h | --help     Display this message
 
 EOF
