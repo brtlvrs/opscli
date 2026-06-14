@@ -192,5 +192,5 @@ writeTODO() {
 #           $1 :  message
 #-- END CHEAT --
   local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
-  ops::console::write "todo" "${yellow}✏${clr_reset} $1\n${_location}"
+  ops::console::write "todo" "${yellow}○${clr_reset} $1\n${_location}"
 }
