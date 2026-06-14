@@ -13,7 +13,7 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 ## What's new
 
-**v2.6.0** — `ops-update` now has a `--beta` flag to install the latest beta release (`ops-update --beta`), and the default no-argument behaviour now explicitly excludes pre-release tags so a plain `ops-update` always lands on a stable version. See the full [CHANGELOG](CHANGELOG.md).
+**v2.7.1** — All `write*` console logging functions have been restyled to a compact single-line format with a coloured symbol prefix (`→`, `✓`, `✗`, `▲`, `✖`, `⚙`, `☐`, `•`). Functions that include call location (`writeWRN`, `writeERR`, `writeDBG`, `writeTODO`) now print it on a second line. Run `ops-writeDEMO` to see them all at once. See the full [CHANGELOG](CHANGELOG.md).
 
 ## Table of contents
 
