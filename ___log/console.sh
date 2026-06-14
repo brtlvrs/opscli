@@ -3,8 +3,8 @@
 function ops::console::write() {
 #-- START CHEAT --
 #  Function: ops::console::write
-#    Alias:  
-#    Description: Write custom message with preformatted headers to stdout
+#    Alias:
+#    Description: Write custom message with preformatted headers to stderr
 #    Parameters:
 #          $1  : message level, INFO, DEBUG, WARNING. ERROR, OK, FAIL, TODO
 #          $2  | custom message
@@ -112,9 +112,9 @@ function ops::console::write() {
 
 writeINF() {
 #-- START CHEAT --
-#  Function: writeINFO
-#    Alias:  
-#    Description: Display INFO header with custom message
+#  Function: writeINF
+#    Alias:
+#    Description: Display INFO header with custom message to stderr
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -123,8 +123,8 @@ writeINF() {
 writeERR() {
 #-- START CHEAT --
 #  Function: writeERR
-#    Alias:  
-#    Description: Display ERROR header with custom message
+#    Alias:
+#    Description: Display ERROR header with custom message to stderr; includes source file and line number
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -133,8 +133,8 @@ writeERR() {
 writeDBG() {
 #-- START CHEAT --
 #  Function: writeDBG
-#    Alias:  
-#    Description: When debug  variable is present, display DEBUG message with custom header
+#    Alias:
+#    Description: Display DEBUG message to stderr; only printed when $DEBUG or $debug is set
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -143,8 +143,8 @@ writeDBG() {
 writeWRN() {
 #-- START CHEAT --
 #  Function: writeWRN
-#    Alias: 
-#    Description: Display WARNING header with custom message
+#    Alias:
+#    Description: Display WARNING header with custom message to stderr; includes source file and line number
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -153,8 +153,8 @@ writeWRN() {
 writeOK() {
 #-- START CHEAT --
 #  Function: writeOK
-#    Alias:  
-#    Description: Display OK header with custom message. Usefull for validation / healthcheck tasks
+#    Alias:
+#    Description: Display single-line OK result to stderr; use for pass/success outcomes in validation or healthcheck scripts
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -163,8 +163,8 @@ writeOK() {
 writeFAIL() {
 #-- START CHEAT --
 #  Function: writeFAIL
-#    Alias:  
-#    Description: Displaying FAIL with custom message. Usefull for validation / healthcheck tasks
+#    Alias:
+#    Description: Display single-line FAIL result to stderr; use for fail/error outcomes in validation or healthcheck scripts
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -173,8 +173,8 @@ writeFAIL() {
 writeNOTE() {
 #-- START CHEAT --
 #  Function: writeNOTE
-#    Alias:  
-#    Description: Displaying NOTE with custom message. Usefull for validation / healthcheck tasks
+#    Alias:
+#    Description: Display single-line NOTE annotation to stderr; use for subtle context messages that don't need the full INFO header
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
@@ -183,8 +183,8 @@ writeNOTE() {
 writeTODO() {
 #-- START CHEAT --
 #  Function: writeTODO
-#    Alias:  
-#    Description: Displaying TODO with file, functionname and linenr where this function is called.
+#    Alias:
+#    Description: Display TODO marker to stderr with function name, file and line number; use during development to flag incomplete code
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
