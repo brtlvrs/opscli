@@ -46,7 +46,7 @@ EOF
             case ${arguments[i]} in
                 -h|--help)
                     ops::extensions::init::_usage
-                    return 1
+                    return 0
                     ;;
                 *)
                     writeWRN "Unknown option ${arguments[i]}"
@@ -99,7 +99,7 @@ EOF
             case ${arguments[i]} in
                 -h|--help)
                     ops::demo::hello::_usage
-                    return 1
+                    return 0
                     ;;
                 *)
                     greeting_name="${arguments[i]}"

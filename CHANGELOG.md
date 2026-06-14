@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.7.4](#v2.7.4)|fix --help returning 1 instead of 0; fix ((i++)) set -e hazard; standardize next_arg skip|
 |[v2.7.3](#v2.7.3)|colour refinements for write* functions; level labels always uppercase; rename writeDEMO|
 |[v2.7.2](#v2.7.2)|update What's new section in README to v2.7.1|
 |[v2.7.1](#v2.7.1)|restyle all write* functions to compact single-line format with symbols; add ops-writeDEMO|
@@ -66,6 +67,16 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.7.4
+
+fixed:
+
+- `functions/show.sh`: `--help` was returning 1 instead of 0
+- `functions/version.sh`: `--help` was returning 1 instead of 0
+- `functions/extensions.sh`: `--help` was returning 1 instead of 0 in both `ops::extensions::init` and the embedded `ops::demo::hello` template
+- `library.sh`, `functions/version.sh`, `tools/http_test.sh`, `tools/http_response.sh`: replaced `((i++))` with `((++i))` when skipping the next argument — post-increment evaluates to 0 when `i=0`, causing `set -e` scripts to exit unexpectedly
+- `tools/http_test.sh`, `tools/http_response.sh`: removed `true` workaround that was masking the `((i++))` bug
 
 # v2.7.3
 

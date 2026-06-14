@@ -52,23 +52,21 @@ EOF
       fi
       case $arg in
           -h | --help)
-              # show help message
               ops::version::isSupported::_usage
-              return 1 # exit parent function with return 0
+              return 0
               ;;
           -v | --version)
               MINVERSION=${next_arg}
-              i=$((i + 1)) # skip next argument as we already processed it
+              ((++i))
               ;;
           -s | --silent)
               # silent mode, do nothing
               SILENT=true
               ;;
-          -*) 
-              # unknown option
+          -*)
               writeWRN "Unknown option ${arguments[i]}"
               ops::version::isSupported::_usage
-              return 2 # exit parent function with return 1
+              return 2
               ;;
           *)
               if echo "$arg" | grep -Pqe '^v[0-9]+.[0-9]+.[0-9]+$'; then
