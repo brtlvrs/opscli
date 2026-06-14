@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.5.0](#v2.5.0)|ops-alias and ops-functions show core/extension source label|
 |[v2.4.1](#v2.4.1)|add What's new section to README|
 |[v2.4.0](#v2.4.0)|two-repo extensions support: OPSCLI_EXTENSIONS_PATH and ops-init-extensions|
 |[v2.3.3](#v2.3.3)|rewrite README.md|
@@ -60,6 +61,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.5.0
+
+changed:
+
+- functions/show.sh: `ops-alias` and `ops-functions` now include extension functions (from `$OPSCLI_EXTENSIONS_PATH`) alongside core functions; each entry is tagged with a colour-coded `[core]` or `[ext]` badge
 
 # v2.4.1
 
