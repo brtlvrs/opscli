@@ -97,7 +97,7 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK|NOTE) ]];  then
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO) ]];  then
       local final_msg="${clr_reset}${message}"
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
@@ -115,11 +115,11 @@ writeINF() {
 #-- START CHEAT --
 #  Function: writeINF
 #    Alias:
-#    Description: Display INFO header with custom message to stderr
+#    Description: Display single-line INFO message to stderr in cyan
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "info" "$1"
+  ops::console::write "info" "${cyan}→${clr_reset} $1"
 }
 writeERR() {
 #-- START CHEAT --
