@@ -36,14 +36,15 @@ ops::functions::show() {
   ops::functions::show::_usage() {
     cat <<- EOF
 
-    Parse all library functions and display the cheatcode textbloks.
+    Parse all library functions and display their cheat blocks, grouped by source
+    (core, extension) and type (user-facing, internal).
 
     command options:
 
-    -f | --full              (default) display each cheatcode block and an alias summary.
+    -f | --full              (default) display each cheat block and an alias summary.
     -h | --help              Display this message
     --summary                Display only the alias summary.
-    --functions              Display only the functions 
+    --functions              Display only the function blocks
 
 EOF
   }
