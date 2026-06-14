@@ -43,16 +43,16 @@ function ops::console::write() {
       LEVEL="INFO" 
     ;;
     warning|WARNING|Warning|WARN|warn|WRN|wrn)
-      clr="${yellow}" # yellow
-      LEVEL="WARNING (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
+      clr="${yellow}"
+      LEVEL="WARNING"
     ;;
     error|ERROR|Error|Err|err|ERR)
-      clr="${red}" # red
-      LEVEL="ERROR  (line ${BASH_LINENO[1]} in ${BASH_SOURCE[2]})" 
+      clr="${red}"
+      LEVEL="ERROR"
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
-      clr="${grey}" # magenta
-      LEVEL="DEBUG" 
+      clr="${yellow}"
+      LEVEL="DEBUG"
       if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
         return 0
@@ -74,8 +74,7 @@ function ops::console::write() {
     ;;
     todo|TODO|Todo)
       clr="${yellow}"
-      LEVEL="TODO at line ${BASH_LINENO[1]} in ${FUNCNAME[2]} in ${BASH_SOURCE[2]}"
-      message="TODO: $message"
+      LEVEL="TODO"
     ;;
     *)
       ops::console::write "error" "Unknown log level $level for msg: $msg"
@@ -97,7 +96,7 @@ function ops::console::write() {
     unset lastLine
   fi
   local printedMSG="${firstLine}\n${message}${clr}${lastLine}${clr_reset}"
-  if [[ "$LEVEL" =~ (FAIL|OK|NOTE) ]];  then
+  if [[ "$LEVEL" =~ (FAIL|OK|NOTE|INFO|DEBUG|WARNING|ERROR|TODO) ]];  then
       local final_msg="${clr_reset}${message}"
       if [[ "$LEVEL" =~ (NOTE) ]]; then
         local final_msg="${message}${clr_reset}"
@@ -115,41 +114,44 @@ writeINF() {
 #-- START CHEAT --
 #  Function: writeINF
 #    Alias:
-#    Description: Display INFO header with custom message to stderr
+#    Description: Display single-line INFO message to stderr in cyan
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "info" "$1"
+  ops::console::write "info" "${cyan}→${clr_reset} $1"
 }
 writeERR() {
 #-- START CHEAT --
 #  Function: writeERR
 #    Alias:
-#    Description: Display ERROR header with custom message to stderr; includes source file and line number
+#    Description: Display ERROR message to stderr; red timestamp header, uncoloured message, red call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "error" "$1"
+  local _location="${red}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "error" "${red}✖${clr_reset} $1\n${_location}"
 }
 writeDBG() {
 #-- START CHEAT --
 #  Function: writeDBG
 #    Alias:
-#    Description: Display DEBUG message to stderr; only printed when $DEBUG or $debug is set
+#    Description: Display DEBUG message to stderr; yellow timestamp header, uncoloured message, yellow call location on last line; only printed when $DEBUG or $debug is set
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "debug" "$1"
+  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "debug" "${yellow}⚙${clr_reset} $1\n${_location}"
 }
 writeWRN() {
 #-- START CHEAT --
 #  Function: writeWRN
 #    Alias:
-#    Description: Display WARNING header with custom message to stderr; includes source file and line number
+#    Description: Display WARNING message to stderr; yellow timestamp header, uncoloured message, yellow call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "warning" "$1"
+  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "warning" "${yellow}▲${clr_reset} $1\n${_location}"
 }
 writeOK() {
 #-- START CHEAT --
@@ -179,15 +181,16 @@ writeNOTE() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "note" "$1"
+  ops::console::write "note" "${grey}•${clr_reset} $1"
 }
 writeTODO() {
 #-- START CHEAT --
 #  Function: writeTODO
 #    Alias:
-#    Description: Display TODO marker to stderr with function name, file and line number; use during development to flag incomplete code
+#    Description: Display TODO marker to stderr; yellow timestamp header, uncoloured message, yellow call location on last line; use during development to flag incomplete code
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "todo" "$1"
+  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "todo" "${yellow}☐${clr_reset} $1\n${_location}"
 }

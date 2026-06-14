@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.7.1](#v2.7.1)|restyle all write* functions to compact single-line format with symbols; add ops-writeDEMO|
 |[v2.7.0](#v2.7.0)|internal function grouping in ops-functions; --help on ops-update and ops-init-dev; cheat block and usage fixes|
 |[v2.6.0](#v2.6.0)|ops-update: --beta flag and stable-only default tag resolution|
 |[v2.5.0](#v2.5.0)|ops-alias and ops-functions show core/extension source label|
@@ -63,6 +64,19 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.7.1
+
+changed:
+
+- `___log/console.sh`: all `write*` functions now use a compact single-line format — coloured timestamp + label, symbol, message; functions that previously used a multi-line header with dashes (`writeINF`, `writeWRN`, `writeERR`, `writeDBG`, `writeTODO`) are now single-line
+- `___log/console.sh`: `writeWRN`, `writeERR`, `writeDBG`, `writeTODO` print the call location (line, function, file) on a second line in their respective colour
+- `___log/console.sh`: `writeDBG` colour changed from grey to yellow
+- `___log/console.sh`: symbols added to all `write*` functions: `writeINF` →, `writeOK` ✓, `writeFAIL` ✗, `writeNOTE` •, `writeWRN` ▲, `writeERR` ✖, `writeTODO` ☐, `writeDBG` ⚙
+
+added:
+
+- `functions/demo.sh`: `ops-writeDEMO` (`ops::console::demo`) — runs all `write*` functions with example messages so you can see the full style at a glance
 
 # v2.7.0
 

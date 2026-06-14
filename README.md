@@ -171,33 +171,28 @@ source ${OPSCLI_PATH}/library.sh -v v2.0.0 || exit 1
 
 ## Console logging
 
-Use these functions instead of raw `echo`. All output goes to stderr.
+Use these functions instead of raw `echo`. All output goes to stderr. Every function produces a compact single-line format: a coloured timestamp + label, a symbol, then the message. Run `ops-writeDEMO` to see them all in one go.
 
-| Function | Colour | Notes |
-|:---|:---|:---|
-| `writeINF` | cyan | General informational message |
-| `writeDBG` | grey | Only printed when `$DEBUG` or `$debug` is set |
-| `writeWRN` | yellow | Includes source file and line number |
-| `writeERR` | red | Includes source file and line number |
-| `writeOK` | green | Single-line pass / success result |
-| `writeFAIL` | red | Single-line fail / validation result |
-| `writeNOTE` | grey | Single-line subtle annotation |
-| `writeTODO` | yellow | Includes function name, file, and line number |
-
-All functions accept a single string argument and support multi-line messages:
+| Function | Symbol | Colour | Notes |
+|:---|:---|:---|:---|
+| `writeINF` | `→` | cyan | General informational message |
+| `writeOK` | `✓` | green | Pass / success result |
+| `writeFAIL` | `✗` | red | Fail / validation result |
+| `writeNOTE` | `•` | grey | Subtle annotation or context |
+| `writeWRN` | `▲` | yellow | Warning; call location printed on last line |
+| `writeERR` | `✖` | red | Hard error; call location printed on last line |
+| `writeTODO` | `☐` | yellow | Marks incomplete code; call location printed on last line |
+| `writeDBG` | `⚙` | yellow | Debug; call location on last line; only printed when `$DEBUG` or `$debug` is set |
 
 ```bash
-writeINF "Library loaded successfully."
-
-writeINF \
-"
-Multi-line message:
-  line one
-  line two
-"
-
-writeWRN "Something unexpected happened."
-writeERR "Fatal: could not connect."
+writeINF  "Library loaded successfully."
+writeOK   "Connection established."
+writeFAIL "Health check failed."
+writeNOTE "Skipping optional step."
+writeWRN  "Config value missing, using default."
+writeERR  "Fatal: could not connect."
+writeTODO "Implement retry logic."
+DEBUG=true writeDBG "Variable value: $myvar"
 ```
 
 ## Writing functions
