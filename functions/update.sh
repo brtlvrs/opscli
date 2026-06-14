@@ -31,6 +31,17 @@ function ops::functions::update() {
 EOF
   }
 
+  local tag=""
+  local beta=false
+  local arguments=($(ops::common::splitArgs "$@"))
+  for (( i=0; i<${#arguments[@]}; i++ )); do
+    case ${arguments[i]} in
+      --beta) beta=true ;;
+      -h|--help) ops::functions::update::_usage; return 0 ;;
+      *)      tag="${arguments[i]}" ;;
+    esac
+  done
+
   local LIBNAME=$(ops::info::get name | tr '[:lower:]' '[:upper:]')
   local LIBPATH_VAR="${LIBNAME}_PATH"
   if [[ ! -v "$LIBPATH_VAR" ]];  then
@@ -43,17 +54,6 @@ EOF
       writeINF "Currently running from dev environment, will update and switch to production."
       target_path="$(ops::info::get prod_path)"
   fi
-
-  local tag=""
-  local beta=false
-  local arguments=($(ops::common::splitArgs "$@"))
-  for (( i=0; i<${#arguments[@]}; i++ )); do
-    case ${arguments[i]} in
-      --beta) beta=true ;;
-      -h|--help) ops::functions::update::_usage; return 0 ;;
-      *)      tag="${arguments[i]}" ;;
-    esac
-  done
 
   local currentPath=$(pwd)
   cd "${target_path}"
