@@ -6,10 +6,31 @@ function ops::functions::update() {
 #    Alias:  ops-update [--beta] [<version>]
 #    Description: Update the opscli repo under $OPSCLI_PATH location
 #    Parameters:
-#          --beta : update to the latest beta release (v*.*.*-beta.*)
-#          $1     : (optional) explicit git tag to update to
-#                   when not used, updates to the latest stable release
+#          --beta         : update to the latest beta release (v*.*.*-beta.*)
+#          -h | --help    : show help
+#          $1             : (optional) explicit git tag to update to
+#                           when not used, updates to the latest stable release
 #-- END CHEAT --
+  function ops::functions::update::_usage() {
+    cat <<- EOF
+
+    Update the opscli framework to a specific or latest version by fetching tags
+    and resetting the repo. Reloads the library after a successful update.
+    When invoked from the dev clone, automatically switches to production first.
+
+    Usage: ops-update [--beta] [<tag>]
+
+    Options:
+    --beta          Update to the latest beta release (v*.*.*-beta.*)
+    -h | --help     Display this message
+
+    Arguments:
+    <tag>           (optional) explicit version tag to update to (e.g. v2.5.0)
+                    when omitted, updates to the latest stable release
+
+EOF
+  }
+
   local LIBNAME=$(ops::info::get name | tr '[:lower:]' '[:upper:]')
   local LIBPATH_VAR="${LIBNAME}_PATH"
   if [[ ! -v "$LIBPATH_VAR" ]];  then
@@ -29,6 +50,7 @@ function ops::functions::update() {
   for (( i=0; i<${#arguments[@]}; i++ )); do
     case ${arguments[i]} in
       --beta) beta=true ;;
+      -h|--help) ops::functions::update::_usage; return 0 ;;
       *)      tag="${arguments[i]}" ;;
     esac
   done
