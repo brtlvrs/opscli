@@ -5,35 +5,31 @@
 
 # the cleanup function will do a rm -rf on all the subfolders starting with this PID
 #-- START CHEAT --
-#  Function: 
+#  Function:
 #    Alias: shellTMPdir
-#    Description: Creates a hidden temp folder under your $HOME folder prefixed with the user id
-#    Usage:
+#    Description: Create a hidden temp folder under $HOME prefixed with the current user id; cleaned up automatically on exit
 #    Parameters:
 #-- END CHEAT --
 alias shellTMPdir='mktemp -d -p $HOME .$(id -u).XXXXX'
 #-- START CHEAT --
-#  Function: 
+#  Function:
 #    Alias: shellTMP
-#    Description: Create a tempfile under a hidden tempfolder in $HOME
-#    Usage:
+#    Description: Create a temp file inside a shellTMPdir folder; cleaned up automatically on exit
 #    Parameters:
 #-- END CHEAT --
 alias shellTMP='mktemp -p $(shellTMPdir)'
 
 #-- START CHEAT --
-#  Function: 
+#  Function:
 #    Alias: ops-dev
-#    Description: reload opscli from development path
-#    Usage:
+#    Description: Switch the active library to the development clone (opscli.dev) and reload
 #    Parameters:
 #-- END CHEAT --
   alias ops-dev="unset ${stopBlock} && source \$(ops::info::get dev_path)/library.sh"
 #-- START CHEAT --
-#  Function: 
+#  Function:
 #    Alias: ops-prod
-#    Description: reload opscli from production path
-#    Usage:
+#    Description: Switch the active library to the production clone and reload
 #    Parameters:
 #-- END CHEAT --
   alias ops-prod="unset ${stopBlock} && source \$(ops::info::get prod_path)/library.sh"

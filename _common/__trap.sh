@@ -7,9 +7,8 @@
 function ops::trap::cleanupTMP() {
 #-- START CHEAT --
 #  Function: ops::trap::cleanupTMP
-#    Alias: 
-#    Description: a cleanup function that removes temporary folders created by shellTMPdir and shellTMP
-#    Usage:
+#    Alias:
+#    Description: removes temporary folders created by shellTMPdir and shellTMP; skipped when $DEBUG is set
 #    Parameters:
 #-- END CHEAT --  
   if [[ -v DEBUG ]]; then
@@ -22,9 +21,8 @@ function ops::trap::cleanupTMP() {
 function ops::trap::Exit() {
 #-- START CHEAT --
 #  Function: ops::trap::Exit
-#    Alias: 
-#    Description: a function to be called on script exit
-#    Usage:
+#    Alias:
+#    Description: trap handler called on script EXIT; runs cleanupTMP
 #    Parameters:
 #-- END CHEAT --  
   ops::trap::cleanupTMP
@@ -33,8 +31,7 @@ function ops::trap::CTRLC() {
 #-- START CHEAT --
 #  Function: ops::trap::CTRLC
 #    Alias:
-#    Description: a function to be called on CTRLC or error
-#    Usage:
+#    Description: trap handler called on CTRL-C or error; runs cleanupTMP and prints a warning
 #    Parameters:
 #-- END CHEAT --  
   # avoid multiple executions
@@ -57,9 +54,8 @@ function ops::trap::CTRLC() {
 function ops::common::appendPromptCommand() {
 #-- START CHEAT --
 #  Function: ops::common::appendPromptCommand
-#    Alias: 
-#    Description: appends extra commands to PROMPT_COMMAND to reset set -x and trapCTRLC_ran before each prompt
-#    Usage:
+#    Alias:
+#    Description: prepended to PROMPT_COMMAND; resets set -x and trapCTRLC_ran before each interactive prompt
 #    Parameters:
 #-- END CHEAT -- 
   local err=$?   
