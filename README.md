@@ -13,7 +13,7 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 ## What's new
 
-**v2.4.0** — Extensions support: set `OPSCLI_EXTENSIONS_PATH` to a separate repo and the framework sources it automatically on load and reload. Use `ops-init-extensions` to bootstrap a new extensions repo with a demo function. See the full [CHANGELOG](CHANGELOG.md).
+**v2.6.0** — `ops-update` now has a `--beta` flag to install the latest beta release (`ops-update --beta`), and the default no-argument behaviour now explicitly excludes pre-release tags so a plain `ops-update` always lands on a stable version. See the full [CHANGELOG](CHANGELOG.md).
 
 ## Table of contents
 
@@ -130,7 +130,7 @@ Follow the same conventions as framework functions — see [Writing functions](#
 | `ops-functions` | Browse the full function cheatsheet (piped through `less -R`) |
 | `ops-alias` | Show alias summary only |
 | `ops-info [key]` | Show library metadata (path, version, git url, env, …) |
-| `ops-update [tag]` | Fetch tags and reset framework to a version |
+| `ops-update [--beta] [tag]` | Fetch tags and reset framework to a version; `--beta` targets the latest beta release |
 | `ops-init-extensions` | Initialize a new extensions repo at `$OPSCLI_EXTENSIONS_PATH` |
 | `shellTMPdir` | Create a hidden temp directory under `$HOME` |
 | `shellTMP` | Create a temp file inside a `shellTMPdir` directory |
