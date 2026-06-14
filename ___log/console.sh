@@ -47,11 +47,11 @@ function ops::console::write() {
       LEVEL="WARNING"
     ;;
     error|ERROR|Error|Err|err|ERR)
-      clr="${red}"
+      clr="${magenta}"
       LEVEL="ERROR"
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
-      clr="${yellow}"
+      clr="${grey}"
       LEVEL="DEBUG"
       if [[ ! -v debug && ! -v DEBUG ]]; then
         # we don't want to know debug level
@@ -124,23 +124,23 @@ writeERR() {
 #-- START CHEAT --
 #  Function: writeERR
 #    Alias:
-#    Description: Display ERROR message to stderr; red timestamp header, uncoloured message, red call location on last line
+#    Description: Display ERROR message to stderr; magenta timestamp header, uncoloured message, magenta call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  local _location="${red}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
-  ops::console::write "error" "${red}✖${clr_reset} $1\n${_location}"
+  local _location="${magenta}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "error" "${magenta}✖${clr_reset} $1\n${_location}"
 }
 writeDBG() {
 #-- START CHEAT --
 #  Function: writeDBG
 #    Alias:
-#    Description: Display DEBUG message to stderr; yellow timestamp header, uncoloured message, yellow call location on last line; only printed when $DEBUG or $debug is set
+#    Description: Display DEBUG message to stderr; grey timestamp header, uncoloured message, grey call location on last line; only printed when $DEBUG or $debug is set
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  local _location="${yellow}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
-  ops::console::write "debug" "${yellow}⚙${clr_reset} $1\n${_location}"
+  local _location="${grey}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "debug" "${grey}⚙${clr_reset} $1\n${_location}"
 }
 writeWRN() {
 #-- START CHEAT --

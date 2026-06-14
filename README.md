@@ -180,9 +180,9 @@ Use these functions instead of raw `echo`. All output goes to stderr. Every func
 | `writeFAIL` | `✗` | red | Fail / validation result |
 | `writeNOTE` | `•` | grey | Subtle annotation or context |
 | `writeWRN` | `▲` | yellow | Warning; call location printed on last line |
-| `writeERR` | `✖` | red | Hard error; call location printed on last line |
+| `writeERR` | `✖` | magenta | Hard error; call location printed on last line |
 | `writeTODO` | `☐` | yellow | Marks incomplete code; call location printed on last line |
-| `writeDBG` | `⚙` | yellow | Debug; call location on last line; only printed when `$DEBUG` or `$debug` is set |
+| `writeDBG` | `⚙` | grey | Debug; call location on last line; only printed when `$DEBUG` or `$debug` is set |
 
 ```bash
 writeINF  "Library loaded successfully."
