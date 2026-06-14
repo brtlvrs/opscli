@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.7.0](#v2.7.0)|internal function grouping in ops-functions; --help on ops-update and ops-init-dev; cheat block and usage fixes|
 |[v2.6.0](#v2.6.0)|ops-update: --beta flag and stable-only default tag resolution|
 |[v2.5.0](#v2.5.0)|ops-alias and ops-functions show core/extension source label|
 |[v2.4.1](#v2.4.1)|add What's new section to README|
@@ -62,6 +63,20 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.7.0
+
+added:
+
+- functions/show.sh: `ops-functions` now groups framework-internal functions in a separate grey `--- Internal functions ---` section at the bottom; mark a function internal by adding `Internal: true` to its cheat block
+- functions/show.sh: `ops-alias` excludes internal functions from the alias summary
+- functions/update.sh: `-h / --help` flag for `ops-update`; argument processing now runs before environment setup so `--help` exits immediately without requiring `OPSCLI_PATH`
+- functions/develop.sh: `-h / --help` flag and `_usage()` for `ops-init-dev`
+
+changed:
+
+- cheat blocks and `_usage()` descriptions corrected and completed across all files: `___log/console.sh`, `_common/__trap.sh`, `_common/_lib-env.sh`, `_common/banner.sh`, `_common/splitArgs.sh`, `_common/askPassword.sh`, `tools/http_test.sh`, `tools/http_response.sh`, `functions/version.sh`
+- internal framework functions marked with `Internal: true`: `ops::trap::cleanupTMP`, `ops::trap::Exit`, `ops::trap::CTRLC`, `ops::common::appendPromptCommand`, `ops::console::write`
 
 # v2.6.0
 

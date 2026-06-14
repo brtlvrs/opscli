@@ -4,7 +4,7 @@ ops::functions::show() {
 #-- START CHEAT --
 #  Function: ops::functions::show
 #    Alias:
-#    Description: show cheatsheet for ops-func library
+#    Description: show cheatsheet for the opscli library
 #    Parameters:
 #       -f | --full              (default) display each cheatcode block and an alias summary.
 #       -h | --help              Display this message
@@ -36,14 +36,15 @@ ops::functions::show() {
   ops::functions::show::_usage() {
     cat <<- EOF
 
-    Parse all library functions and display the cheatcode textbloks.
+    Parse all library functions and display their cheat blocks, grouped by source
+    (core, extension) and type (user-facing, internal).
 
     command options:
 
-    -f | --full              (default) display each cheatcode block and an alias summary.
+    -f | --full              (default) display each cheat block and an alias summary.
     -h | --help              Display this message
     --summary                Display only the alias summary.
-    --functions              Display only the functions 
+    --functions              Display only the function blocks
 
 EOF
   }
@@ -100,6 +101,8 @@ EOF
       scan_labels+=("extension")
     fi
 
+    local internal_output=""
+
     for p in "${!scan_paths[@]}"; do
       local scan_path="${scan_paths[$p]}"
       local source_label="${scan_labels[$p]}"
@@ -126,34 +129,50 @@ EOF
           line = $0
           if (line !~ /^#/) next
           line = substr(line, 2)
-          if ( line ~ start) { in_block=1; next}
-          if (in_block && line ~ end)  { in_block=0; print "\n" ; next }
+          if ( line ~ start) { in_block=1; is_internal=0; block=""; next }
+          if (in_block && line ~ end) {
+            in_block=0
+            if (block != "") {
+              if (is_internal) printf "__INTERNAL__"
+              print block "\n"
+            }
+            block=""; is_internal=0; next
+          }
           if ( in_block ) {
+            if (line ~ /Internal:/) { is_internal=1; next }
             if ( /Function:/) {
               split(line, parts, ":")
               if (slabel == "extension")
                 badge=" \033[93m[ext]\033[0m"
               else
                 badge=" \033[37m[core]\033[0m"
-              printf "\033[32m  Function: %s\033[95m%s\033[0m%s\n","", substr(line, length(parts[1])+2), badge
-              print "    File: \033[96m" fname "\033[0m"
+              block = block sprintf("\033[32m  Function: %s\033[95m%s\033[0m%s\n", "", substr(line, length(parts[1])+2), badge)
+              block = block "    File: \033[96m" fname "\033[0m\n"
               }
             else if (line ~ /Alias:/) {
               split(line, parts, ":")
-              printf "%s:\033[93m%s\033[0m\n", parts[1], parts[2]
-              next
+              block = block sprintf("%s:\033[93m%s\033[0m\n", parts[1], parts[2])
               }
-            else { print line }
+            else { block = block line "\n" }
             }
           }
         ' "$file")
 
         if [[ -n "$txt_block" ]]; then
-          echo -e "\n$txt_block\n"
+          if [[ "$txt_block" == __INTERNAL__* ]]; then
+            internal_output+="${txt_block#__INTERNAL__}"
+          else
+            echo -e "\n$txt_block\n"
+          fi
         fi
 
       done
     done
+
+    if [[ -n "$internal_output" ]]; then
+      echo -e "\n\033[90m--- Internal functions ---\033[0m"
+      echo -e "$internal_output"
+    fi
   }
 
   ops::functions::show::_aliases() {
@@ -199,10 +218,10 @@ EOF
           line = $0
           if (line !~ /^#/) next
           line = substr(line, 2)
-          if ( line ~ start) { in_block=1; alias=""; desc=""; next}
+          if ( line ~ start) { in_block=1; alias=""; desc=""; is_internal=0; next}
           if (in_block && line ~ end)  {
             in_block=0
-            if ( alias != "" ) {
+            if ( alias != "" && !is_internal ) {
               if (slabel == "extension")
                 badge="\033[93m[ext]\033[0m"
               else
@@ -217,6 +236,8 @@ EOF
               gsub(/[ \t]+$/, "", line)
               sub(/Alias:[ \t]*/, "", line)
               alias=line
+            } else if (line ~ /Internal:/) {
+              is_internal=1
             } else if (line ~ /Description:/) {
               gsub(/^[ \t]+/, "", line)
               gsub(/[ \t\n]+$/, "", line)
@@ -262,7 +283,7 @@ ops::functions::less() {
 #-- START CHEAT --
 #  Function: ops::functions::less
 #    Alias:  ops-functions
-#    Description: show the cheat block for this library piped through less -R
+#    Description: browse the full opscli cheatsheet (all function and alias descriptions) piped through less -R
 #    Parameters:
 #       -f | --full              (default) display each cheatcode block and an alias summary.
 #       -h | --help              Display this message

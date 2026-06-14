@@ -3,9 +3,10 @@
 ops::common::splitArgs(){
 #-- START CHEAT --
 #  Function: ops::common::splitArgs
-#    Alias:  
-#    Description: Process all arguments and return them in a default structure, arg=value ==> arg value
-#    usage: newargs=($(ops::common::splitArgs "${args[@]")))
+#    Alias:
+#    Description: Normalise arguments by splitting --key=value into --key value pairs; use at the start of _process-arguments
+#    Parameters:
+#      $@ : argument list to normalise; returns expanded list via stdout
 #-- END CHEAT --
 
   # input: [array][strings] ("$@") or "${args[@]}"
