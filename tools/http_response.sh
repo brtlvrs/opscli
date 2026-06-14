@@ -1,4 +1,15 @@
 function ops::http::status_code() {
+#-- START CHEAT --
+#  Function: ops::http::status_code
+#    Alias:
+#    Description: Fetch the HTTP status code for a URL and optionally validate it against a pattern
+#    Parameters:
+#      -u | --url      URL to check (http:// or https://)
+#      -s | --status   regexp to match the status code against (default: ^(2|3)[0-9][0-9])
+#      -q | --quit     Suppress status code output; only return exit code
+#      -k              Skip SSL certificate validation
+#      -h | --help     Show help
+#-- END CHEAT --
   
   ops::http::status_code::_usage() {
     cat <<- EOF

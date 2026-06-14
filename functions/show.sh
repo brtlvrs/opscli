@@ -4,7 +4,7 @@ ops::functions::show() {
 #-- START CHEAT --
 #  Function: ops::functions::show
 #    Alias:
-#    Description: show cheatsheet for ops-func library
+#    Description: show cheatsheet for the opscli library
 #    Parameters:
 #       -f | --full              (default) display each cheatcode block and an alias summary.
 #       -h | --help              Display this message
@@ -262,7 +262,7 @@ ops::functions::less() {
 #-- START CHEAT --
 #  Function: ops::functions::less
 #    Alias:  ops-functions
-#    Description: show the cheat block for this library piped through less -R
+#    Description: browse the full opscli cheatsheet (all function and alias descriptions) piped through less -R
 #    Parameters:
 #       -f | --full              (default) display each cheatcode block and an alias summary.
 #       -h | --help              Display this message

@@ -1,11 +1,11 @@
 function ops::common::askPassword() {
 #-- START CHEAT --
 #  Function: ops::common::askPassword
-#    Alias: 
-#    Description: Ask user to enter a password. Supports backspacevia DEL and clearing the line via CTRL+U.
-#    Usage:
+#    Alias:
+#    Description: Prompt for a password without echo; supports DEL (backspace) and CTRL+U (clear line)
 #    Parameters:
-#    ENV vars:
+#      (none) — captures keystrokes directly; returns the entered password via stdout
+#      Usage: PASSWORD=$(ops::common::askPassword)
 #-- END CHEAT --
   # ask for password
   unset PASSWORD
