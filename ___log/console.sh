@@ -47,7 +47,7 @@ function ops::console::write() {
       LEVEL="WARNING"
     ;;
     error|ERROR|Error|Err|err|ERR)
-      clr="${magenta}"
+      clr="${red}"
       LEVEL="ERROR"
     ;;
     debug|DEBUG|Debug|DBG|dbg|Dbg)
@@ -64,12 +64,10 @@ function ops::console::write() {
     ;;
     fail|FAIL|false|FALSE|False|Fail)
       clr="$blackOnRed"
-      clr="${red}"
-      LEVEL="FAIL" 
+      LEVEL="FAIL"
     ;;
     true|TRUE|True|OK|Ok|ok)
       clr="$blackOnGreen"
-      clr="${green}"
       LEVEL="OK"
     ;;
     todo|TODO|Todo)
@@ -124,12 +122,12 @@ writeERR() {
 #-- START CHEAT --
 #  Function: writeERR
 #    Alias:
-#    Description: Display ERROR message to stderr; magenta timestamp header, uncoloured message, magenta call location on last line
+#    Description: Display ERROR message to stderr; red timestamp header, uncoloured message, red call location on last line
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  local _location="${magenta}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
-  ops::console::write "error" "${magenta}✖${clr_reset} $1\n${_location}"
+  local _location="${red}(line ${BASH_LINENO[0]} in ${FUNCNAME[1]} in ${BASH_SOURCE[1]})${clr_reset}"
+  ops::console::write "error" "${red}✖${clr_reset} $1\n${_location}"
 }
 writeDBG() {
 #-- START CHEAT --
@@ -161,7 +159,7 @@ writeOK() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "ok" "${green}✓${clr_reset} $1"
+  ops::console::write "ok" "${blackOnGreen}✓${clr_reset} $1"
 }
 writeFAIL() {
 #-- START CHEAT --
@@ -171,7 +169,7 @@ writeFAIL() {
 #    Parameters:
 #           $1 :  message
 #-- END CHEAT --
-  ops::console::write "fail" "${red}✗${clr_reset} $1"
+  ops::console::write "fail" "${blackOnRed}✗${clr_reset} $1"
 }
 writeNOTE() {
 #-- START CHEAT --
