@@ -59,29 +59,33 @@ EOF
 
     function ops::extensions::init::_main() {
         local ext_path="${OPSCLI_EXTENSIONS_PATH}"
+        local prefix
+
+        read -r -p "Function prefix (e.g. mycompany) [ops]: " prefix
+        prefix="${prefix:-ops}"
 
         writeINF "Initializing extensions repo at ${ext_path}"
         mkdir -p "${ext_path}/demo"
 
-        # write demo function
-        cat > "${ext_path}/demo/hello.sh" <<'DEMOEOF'
+        # write demo function using chosen prefix
+        cat > "${ext_path}/demo/hello.sh" <<DEMOEOF
 #!/bin/bash
 
-function ops::demo::hello() {
+function ${prefix}::demo::hello() {
 #-- START CHEAT --
-#  Function: ops::demo::hello
-#    Alias:  ops-hello
+#  Function: ${prefix}::demo::hello
+#    Alias:  ${prefix}-hello
 #    Description: Demo function — replace this with your own
 #    Parameters:
 #      -h | --help   Show help
-#      $1            Name to greet (optional)
+#      \$1            Name to greet (optional)
 #-- END CHEAT --
 
-    function ops::demo::hello::_usage() {
+    function ${prefix}::demo::hello::_usage() {
         cat <<-EOF
         Demo function. Replace this with your own.
 
-        Usage: ops-hello [-h] [name]
+        Usage: ${prefix}-hello [-h] [name]
 
         Options:
           -h, --help    Show this help message and exit
@@ -89,38 +93,38 @@ function ops::demo::hello() {
 EOF
     }
 
-    function ops::demo::hello::_guardrails() {
+    function ${prefix}::demo::hello::_guardrails() {
         return 0
     }
 
-    function ops::demo::hello::_process-arguments() {
-        local arguments=($(ops::common::splitArgs "$@"))
-        for (( i=0; i<${#arguments[@]}; i++ )); do
-            case ${arguments[i]} in
+    function ${prefix}::demo::hello::_process-arguments() {
+        local arguments=(\$(ops::common::splitArgs "\$@"))
+        for (( i=0; i<\${#arguments[@]}; i++ )); do
+            case \${arguments[i]} in
                 -h|--help)
-                    ops::demo::hello::_usage
+                    ${prefix}::demo::hello::_usage
                     return 0
                     ;;
                 *)
-                    greeting_name="${arguments[i]}"
+                    greeting_name="\${arguments[i]}"
                     ;;
             esac
         done
     }
 
-    function ops::demo::hello::_main() {
-        local name="${greeting_name:-world}"
-        writeINF "Hello, ${name}!"
+    function ${prefix}::demo::hello::_main() {
+        local name="\${greeting_name:-world}"
+        writeINF "Hello, \${name}!"
         return 0
     }
 
     unset greeting_name
-    ops::demo::hello::_guardrails "$@" || return $?
-    ops::demo::hello::_process-arguments "$@" || return $?
-    ops::demo::hello::_main || return $?
+    ${prefix}::demo::hello::_guardrails "\$@" || return \$?
+    ${prefix}::demo::hello::_process-arguments "\$@" || return \$?
+    ${prefix}::demo::hello::_main || return \$?
 }
 
-alias ops-hello='ops::demo::hello'
+alias ${prefix}-hello='${prefix}::demo::hello'
 DEMOEOF
 
         cd "${ext_path}"
@@ -137,8 +141,8 @@ DEMOEOF
        ops-reload
 
   2. Try the demo:
-       ops-hello
-       ops-hello YourName
+       ${prefix}-hello
+       ${prefix}-hello YourName
 
   3. Add your own functions under ${ext_path}/<subfolder>/<name>.sh
      and run ops-reload to load them."
