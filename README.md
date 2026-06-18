@@ -13,7 +13,7 @@ A BASH shell framework that is sourced into an interactive shell (via `.bashrc`)
 
 ## What's new
 
-**v2.7.3** — Colour refinements for `write*` functions: `writeERR` is now red, `writeFAIL` is black on red, `writeOK` is black on green. Level labels in output are now always uppercase. Demo function renamed to `writeDEMO`. See the full [CHANGELOG](CHANGELOG.md).
+**v2.9.0** — New `ops-init-extensions-py` command to initialize a Python-based extensions repo — extension logic in Python, repo management in bash, with a virtual environment and console_scripts entry points. `ops-init-extensions` now prompts for a function prefix. See the full [CHANGELOG](CHANGELOG.md).
 
 ## Table of contents
 
@@ -87,27 +87,33 @@ At shell startup, `.bashrc` sources the framework. If `OPSCLI_EXTENSIONS_PATH` p
 
 Your custom functions live in a separate repo that you create and manage. The framework sources it automatically when `OPSCLI_EXTENSIONS_PATH` is set.
 
-### Setting up your extensions repo
+### Bash extensions
+
+Use the built-in init command to scaffold a pure-bash extensions repo:
 
 ```bash
-mkdir -p $HOME/repos/my-functions
-cd $HOME/repos/my-functions
-git init
+export OPSCLI_EXTENSIONS_PATH="$HOME/repos/my-functions"
+ops-init-extensions
 ```
 
-Add subfolders for your functions — any `.sh` file in any subfolder is sourced automatically:
+The command prompts for a function prefix (e.g. `mycompany`) and generates a repo with a demo function and git history. Any `.sh` file in any subfolder is sourced automatically on `ops-reload`.
 
-```
-my-functions/
-├── kubernetes/
-│   └── helpers.sh
-├── aws/
-│   └── helpers.sh
-└── daily/
-    └── shortcuts.sh
+### Python extensions
+
+For extensions that benefit from Python (API clients, structured data, cloud SDKs), use the Python-aware init:
+
+```bash
+export OPSCLI_EXTENSIONS_PATH="$HOME/repos/my-functions"
+ops-init-extensions-py
 ```
 
-Set `OPSCLI_EXTENSIONS_PATH` in your `.bashrc` (before the `source` line) and reload. Your functions are now available alongside the framework functions.
+This generates a repo with:
+
+- **Python extensions** — argparse-based CLIs installed as console_scripts entry points in a `.venv`
+- **Bash wrappers** — thin `.sh` files with cheat blocks so `ops-functions` discovers them
+- **Bash management functions** — info, dev/prod switching, and update (including automatic `pip install -e .` after version updates)
+
+See the generated repo's README for details on adding new Python extensions.
 
 ### Updating the framework without affecting extensions
 
@@ -118,10 +124,6 @@ ops-reload          # reloads both framework and extensions
 
 Because your extensions live in a separate repo, `ops-update` (which does a `git reset --hard` inside the framework repo) never touches your files.
 
-### Writing extension functions
-
-Follow the same conventions as framework functions — see [Writing functions](#writing-functions). Use the `ops::*` namespace so your functions appear in `ops-functions` and are cleaned up correctly on `ops-reload`.
-
 ## Key aliases
 
 | Alias | Description |
@@ -131,7 +133,8 @@ Follow the same conventions as framework functions — see [Writing functions](#
 | `ops-alias` | Show alias summary only |
 | `ops-info [key]` | Show library metadata (path, version, git url, env, …) |
 | `ops-update [--beta] [tag]` | Fetch tags and reset framework to a version; `--beta` targets the latest beta release |
-| `ops-init-extensions` | Initialize a new extensions repo at `$OPSCLI_EXTENSIONS_PATH` |
+| `ops-init-extensions` | Initialize a new bash extensions repo at `$OPSCLI_EXTENSIONS_PATH` |
+| `ops-init-extensions-py` | Initialize a new Python-based extensions repo at `$OPSCLI_EXTENSIONS_PATH` |
 | `shellTMPdir` | Create a hidden temp directory under `$HOME` |
 | `shellTMP` | Create a temp file inside a `shellTMPdir` directory |
 

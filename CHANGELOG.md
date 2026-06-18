@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.9.0](#v2.9.0)|ops-init-extensions-py: initialize Python-based extension repos; updated README|
 |[v2.8.0](#v2.8.0)|ops-init-extensions prompts for function prefix instead of hardcoding ops::|
 |[v2.7.4](#v2.7.4)|fix --help returning 1 instead of 0; fix ((i++)) set -e hazard; standardize next_arg skip|
 |[v2.7.3](#v2.7.3)|colour refinements for write* functions; level labels always uppercase; rename writeDEMO|
@@ -68,6 +69,13 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.9.0
+
+added:
+
+- `functions/extensions-python.sh`: `ops-init-extensions-py` (`ops::extensions::init-python`) — initializes a Python-based extensions repo with a demo extension (argparse CLI), bash wrappers with cheat blocks, management functions (info, dev/prod switch, update), a virtual environment, and an initial git commit
+- `README.md`: updated Extensions section with Python and bash init paths; added `ops-init-extensions-py` to key aliases table; updated What's new
 
 # v2.8.0
 
