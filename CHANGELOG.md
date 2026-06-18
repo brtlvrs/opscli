@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.8.0](#v2.8.0)|ops-init-extensions prompts for function prefix instead of hardcoding ops::|
 |[v2.7.4](#v2.7.4)|fix --help returning 1 instead of 0; fix ((i++)) set -e hazard; standardize next_arg skip|
 |[v2.7.3](#v2.7.3)|colour refinements for write* functions; level labels always uppercase; rename writeDEMO|
 |[v2.7.2](#v2.7.2)|update What's new section in README to v2.7.1|
@@ -67,6 +68,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.8.0
+
+changed:
+
+- `functions/extensions.sh`: `ops-init-extensions` now prompts for a function prefix (e.g. `mycompany`) before creating the extensions repo; the chosen prefix is applied to all generated function names, aliases, and the cheat block; defaults to `ops` if left blank
 
 # v2.7.4
 
