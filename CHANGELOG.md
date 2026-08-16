@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.11.1](#v2.11.1)|fix PROMPT_COMMAND being exported, leaking into child shells that never source library.sh|
 |[v2.11.0](#v2.11.0)|welcome message always shows extensions name/version; restore banner on reload|
 |[v2.10.0](#v2.10.0)|welcome message shows extensions dev/prod status alongside the library's|
 |[v2.9.0](#v2.9.0)|ops-init-extensions-py: initialize Python-based extension repos; updated README|
@@ -71,6 +72,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.11.1
+
+fixed:
+
+- `_common/__trap.sh`: `PROMPT_COMMAND` was exported, leaking into any child bash process that doesn't source `library.sh` (subshells, new tmux/screen panes, `bash` invoked directly); those shells inherited a reference to `ops::common::appendPromptCommand`, a plain shell function that is never inherited, causing `command not found` on every prompt
 
 # v2.11.0
 

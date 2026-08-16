@@ -83,5 +83,8 @@ if [[ "$PROMPT_COMMAND" != *"ops::common::appendPromptCommand"* ]]; then
     PROMPT_COMMAND="ops::common::appendPromptCommand"
   fi
 fi
-export PROMPT_COMMAND
+# NOTE: intentionally not exported — PROMPT_COMMAND only needs to apply to this
+# shell; exporting it leaks the setting into child shells that inherit the env
+# var but never source library.sh, so the function is undefined there and every
+# prompt in the child shell fails with "command not found".
 
