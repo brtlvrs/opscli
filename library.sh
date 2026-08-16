@@ -128,7 +128,11 @@ REPOVERSION="$(ops::info::get version)"
 # start building welcome message
 welcomeMSG="$(ops::info::get name) library (version ${magenta}$REPOVERSION${clr_reset}) is loaded."
 if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" && -d "${OPSCLI_EXTENSIONS_PATH}" ]]; then
-  welcomeMSG="${welcomeMSG} Extensions loaded from ${cyan}${OPSCLI_EXTENSIONS_PATH}${clr_reset}."
+  if declare -F ext::manage::info >/dev/null 2>&1; then
+    welcomeMSG="${welcomeMSG} Extensions '$(ext::manage::info name)' (version ${magenta}$(ext::manage::info version)${clr_reset}) loaded from ${cyan}${OPSCLI_EXTENSIONS_PATH}${clr_reset}."
+  else
+    welcomeMSG="${welcomeMSG} Extensions loaded from ${cyan}${OPSCLI_EXTENSIONS_PATH}${clr_reset}."
+  fi
 fi
 
 # Detect if we are running in a Concourse Task
@@ -187,7 +191,9 @@ To see which ${cyan}aliases${clr_reset} are made available run '${yellow}ops-ali
 For general ${cyan}info${clr_reset} about the library run '${yellow}ops-info${clr_reset}'"
   writeDBG "Sourced from an interactive BASH shell"
 fi
-# display welcome message
+
+# display banner (skipped in a Concourse Task) and welcome message
+[[ -v ATC_EXTERNAL_URL ]] || ops::common::banner
 writeINF "$welcomeMSG"
 
 

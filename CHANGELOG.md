@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.11.0](#v2.11.0)|welcome message always shows extensions name/version; restore banner on reload|
 |[v2.10.0](#v2.10.0)|welcome message shows extensions dev/prod status alongside the library's|
 |[v2.9.0](#v2.9.0)|ops-init-extensions-py: initialize Python-based extension repos; updated README|
 |[v2.8.0](#v2.8.0)|ops-init-extensions prompts for function prefix instead of hardcoding ops::|
@@ -70,6 +71,17 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.11.0
+
+added:
+
+- `library.sh`: the welcome message now always shows the extensions repo's name and version (via `ext::manage::info` when the loaded extensions define it, e.g. `opscli-ext`), not just when it's a dev clone
+
+fixed:
+
+- `library.sh`: restore the `ops::common::banner` ASCII-art banner on every reload (skipped only inside a Concourse Task) — this was dropped during an earlier welcome-message refactor and had regressed to a stray, misplaced call inside `ops::version::isSupported()`
+- `functions/version.sh`: remove the stray `ops::common::banner` call from `ops::version::isSupported()` — it didn't belong there and would double-print the banner whenever the version check ran interactively (e.g. from another function's guardrails)
 
 # v2.10.0
 
