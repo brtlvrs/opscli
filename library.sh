@@ -137,15 +137,45 @@ if [[ -v ATC_EXTERNAL_URL ]]; then
   welcomeMSG="$welcomeMSG\n\n${cyan}Concourse ATC${clr_reset} environment variable detected, we are running in a Concourse Task !!"
 fi
 
-# Detect if we are running in a dev folder and add warning to welcome message
+# Detect if a given path is a dev clone (".dev" suffix) and format a warning
+# note for the welcome message. Shared between the library path and the
+# extensions path so both get the same treatment.
+function _opscli_dev_clone_note() {
+  # $1=path  $2=label (e.g. "Library" / "Extensions")  $3=switch-to-prod alias hint (optional)
+  local path="$1" label="$2" hint="${3:-}"
+  [[ "$path" =~ \.dev$ ]] || return 1
+  local note="${yellow}WARNING:${clr_reset} ${label} running from a development folder ${path}"
+  if [[ -n "$hint" ]]; then
+    note="${note}
+  To switch to production run '${yellow}${hint}${clr_reset}'"
+  fi
+  printf '%s' "$note"
+}
+
+# Library dev-clone warning. $HOME/.$(name).dev is a marker file .bashrc
+# checks on every new shell to decide whether to load the dev or prod clone,
+# so it must stay in sync with whether OPSCLI_PATH is currently a dev clone.
 rm "$HOME/.$(ops::info::get name).dev" > /dev/null 2>&1
-if [[ "$OPSCLI_PATH" =~ .dev$ ]]; then
+if libDevNote="$(_opscli_dev_clone_note "$OPSCLI_PATH" "Library" "ops-prod")"; then
   welcomeMSG="${welcomeMSG}
-  
-  ${yellow}WARNING:${clr_reset} Running from a development folder $OPSCLI_PATH
-  To switch to production run '${yellow}ops-prod${clr_reset}'"
-  touch $HOME/.$(ops::info::get name).dev
+
+${libDevNote}"
+  touch "$HOME/.$(ops::info::get name).dev"
 fi
+
+# Extensions dev-clone warning (no marker file — extensions have no
+# persistent dev/prod state across shells, only for the current session).
+if [[ -n "${OPSCLI_EXTENSIONS_PATH:-}" ]]; then
+  extProdHint=""
+  declare -F ext::manage::prod >/dev/null 2>&1 && extProdHint="ext-prod"
+  if extDevNote="$(_opscli_dev_clone_note "$OPSCLI_EXTENSIONS_PATH" "Extensions" "$extProdHint")"; then
+    welcomeMSG="${welcomeMSG}
+
+${extDevNote}"
+  fi
+  unset extProdHint extDevNote
+fi
+unset libDevNote
 
 # Detect if we are sourced from an interactive BASH shell and add some hints to welcome message
 if [[ $0 == bash || $0 == -bash || $0  == */bash ]]; then

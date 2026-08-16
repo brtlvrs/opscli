@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.10.0](#v2.10.0)|welcome message shows extensions dev/prod status alongside the library's|
 |[v2.9.0](#v2.9.0)|ops-init-extensions-py: initialize Python-based extension repos; updated README|
 |[v2.8.0](#v2.8.0)|ops-init-extensions prompts for function prefix instead of hardcoding ops::|
 |[v2.7.4](#v2.7.4)|fix --help returning 1 instead of 0; fix ((i++)) set -e hazard; standardize next_arg skip|
@@ -69,6 +70,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.10.0
+
+changed:
+
+- `library.sh`: the welcome message now shows a dev/prod warning for `OPSCLI_EXTENSIONS_PATH` (matching the existing warning for `OPSCLI_PATH`), including a `ext-prod` hint when that alias is available; the dev-clone warning logic is now shared between the library and extensions paths via a `_opscli_dev_clone_note` helper instead of being duplicated
 
 # v2.9.0
 
