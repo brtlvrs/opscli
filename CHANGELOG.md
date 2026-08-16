@@ -3,6 +3,7 @@
 # Version
 |version|Worked
 |---|---|
+|[v2.11.2](#v2.11.2)|fix OPSCLI_LOADED stop-block variable being exported, blocking library load in child shells|
 |[v2.11.1](#v2.11.1)|fix PROMPT_COMMAND being exported, leaking into child shells that never source library.sh|
 |[v2.11.0](#v2.11.0)|welcome message always shows extensions name/version; restore banner on reload|
 |[v2.10.0](#v2.10.0)|welcome message shows extensions dev/prod status alongside the library's|
@@ -72,6 +73,12 @@ Version format is ```<major>.<minor>.<patch>```
 |major|Structural / breaking changes|
 |minor|New functionality without breaking changes|
 |patch|bug fixes|
+
+# v2.11.2
+
+fixed:
+
+- `library.sh`: the `OPSCLI_LOADED` stop-block variable was exported, causing any child shell that inherits the environment and then tries to source `library.sh` (e.g. via `.bashrc`) to hit the early-return stop-block guard immediately, silently skipping definition of every opscli function and alias while other exported state (like `PROMPT_COMMAND`, fixed in v2.11.1) still referenced them
 
 # v2.11.1
 

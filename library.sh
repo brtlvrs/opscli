@@ -93,7 +93,10 @@ done
 
 # set stopblock
 eval "$stopBlock"="true"
-export $stopBlock # mark that the library has been loaded
+# NOTE: intentionally not exported — this guard only needs to apply to the
+# current shell. Exporting it caused child shells that inherit the env but
+# then try to source library.sh themselves to hit the early-return guard
+# above and silently skip defining every opscli function/alias.
 
 # create helper to determine how to exit
 # detect if we are sourced or running directly
